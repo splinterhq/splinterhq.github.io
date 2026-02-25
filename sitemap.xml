@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://splinter-website.netlify.app/</loc>
+    <loc>https://splinterhq.github.io/</loc>
     <lastmod>2026-02-20T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinter-website.netlify.app/bindings/</loc>
+    <loc>https://splinterhq.github.io/bindings/</loc>
     <lastmod>2026-02-20T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinter-website.netlify.app/cli/</loc>
+    <loc>https://splinterhq.github.io/cli/</loc>
     <lastmod>2026-02-20T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinter-website.netlify.app/core/</loc>
+    <loc>https://splinterhq.github.io/core/</loc>
     <lastmod>2026-02-20T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinter-website.netlify.app/shards/</loc>
+    <loc>https://splinterhq.github.io/shards/</loc>
     <lastmod>2026-02-20T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinter-website.netlify.app/splinter_and_linux/</loc>
+    <loc>https://splinterhq.github.io/splinter_and_linux/</loc>
     <lastmod>2026-02-20T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinter-website.netlify.app/splinter_performance/</loc>
+    <loc>https://splinterhq.github.io/splinter_performance/</loc>
     <lastmod>2026-02-20T00:00:00.000Z</lastmod>
   </url>
 </urlset>
