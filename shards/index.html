@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>What Are Splinter Logic Shards? - Splinter Vector KV Substrate</title>
+    <meta name="color-scheme" content="dark">
+    <meta name="google-site-verification" content="VeO_yT6FjnKg9wV002inpWr2pvcVfbQRevxZ0hXfw0g">
+    <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/dark.css" onload="document.documentElement.classList.add('sl-theme-dark');">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="canonical" href="https://splinter-website.netlify.app/shards/">
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
+    </script>
+  <meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Vector KV Substrate">
+<meta property="og:locale" content="en">
+<meta property="og:description" content="Learn about Splinter Logic Shards, loadable modules that allow dynamic extension of the CLI architecture for custom data processing and transformation.">
+<meta property="og:url" content="https://splinter-website.netlify.app/shards/">
+<meta property="og:image" content="https://splinter-website.netlify.app/uploads/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Learn about Splinter Logic Shards, loadable modules that allow dynamic extension of the CLI architecture for custom data processing and transformation.">
+<meta name="keywords" content="Logic Shards, Loadable Modules, Dynamic Extension, C Plugins, Data Transformation">
+<meta name="robots" content="index, follow">
+<meta name="generator" content="Lume 3.1.1">
+<link rel="icon" sizes="32x32" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
+</head>
+  <body>
+    <main class="container">
+      <nav class="top-nav" id="nav">
+        <a href="/">INTRO</a>
+        <a href="/core">CORE</a>
+        <a href="/cli">CLI</a>
+        <a href="/shards">SHARDS</a>
+        <a href="/bindings">BINDINGS</a>
+        <a href="https://github.com/splinterhq/libsplinter/tree/main" target="_blank">CODE</a>
+      </nav>
+      <div style="clear: both"></div>
+      <h1>What Are Splinter Logic Shards?</h1>
+<p>Splinter's CLI is easily extended, but, you might want to link against
+<em>considerably more</em> than Splinter's build system allows for, and it's usually
+just for one or several very specific tasks.</p>
+<p>In short, you need to be able to load modules into the CLI architecture that can
+handle your custom processing, transformation, observation, <em><strong>whatever</strong></em>
+without having to wrangle linkage and that didn't need to be located in-tree to
+be compiled.</p>
+<p>If you want to develop a <code>foo</code> command, you should be able to just do so and
+point <code>splinterctl</code> or <code>splinter_cli</code> at the <code>.so</code> file and, provided it
+conforms to a symbol map, loads it.</p>
+<p>This gives you access to Splinter with all the CLI structure and whatever else
+you want to bring in, without having to modify Splinter or the tools.</p>
+<h2>The Solution: Loadable Shards (a type-punned derivative of a "splinter" 🤓)</h2>
+<p>Design constraints prevent making the CLI's module list dynamic; some
+platforms disallow heap allocation entirely so Splinter tries hard to not
+require it for anything essential, even in tooling.</p>
+<p>We need to instead have an optional dynamic module structure that can advertise
+and enter these 'shards' for the user. As long as they contain the correct entry
+points and metadata, they can be compiled anywhere <code>splinter.h</code> can be found.
+This <code>splinter_shard_t</code> will be the only coupling of tooling to the core store
+(found in the core header, not CLI).</p>
+<h2>Progress: Figured Out Mostly and Coming Soon!</h2>
+<p>Implementation requires a little juggling of what the CLI currently understands
+a use session to look like as far as different users loading different shards
+that have the same topological access to the same store.</p>
+<p>There's some memory expectation setting and accounting to tackle as shards load
+and prepare workloads that might compete with each other, as well as some other
+debt refactoring in the CLI that's already planned to consider (which is mostly
+done).</p>
+<p>I may add store-level accounting bits so that individual shards each calling
+<code>posix_madvise()</code> regarding what they intend to do with the store doesn't
+result in the kernel being sent a stream of erratic mixed signals. The kernel
+can't be put in a state where it has to constantly re-evaluate its page cache
+strategy for the same region just because a cron job was ill-conceived.</p>
+<p>We don't care what individual shards advise regarding their own heap, but a
+centralized advisory governor might be needed. Shards 'register' their intended
+access patterns rather than calling the kernel directly. This ensures that a backfill
+task and a real-time monitor don't send conflicting signals to the page cache,
+maintaining the L3 pipeline's integrity even under (perhaps unintentionally) heavy
+workloads.</p>
+<p>Some macros to help make sure memory advisement is coordinated and (upon finishing)
+examined for expectation meeting reality should make this pretty much invisible to
+clients, if it turns out anything is needed at all. At the cost of maybe 16 or 32
+extra bits in the store global header along with the structure. The rest really
+is just the simple <code>dlopen()</code> loader and unloader code.</p>
+<p>Shards are expected Late February / Early March 2026.</p>
+<h2>What Can We *DO* With Them, Though?!</h2>
+<p>Practical examples would be sidecar analysis, backfill, a shard could even
+expose the store as a RESTful interface (similar to how it's currently done
+with <code>Deno -&gt; FFI -&gt; Oak</code> or even <code>Bun -&gt; FFI -&gt; Express</code>, except we remove
+runtimes and TypeScript from the service loop by doing it with C and a micro
+http server that supports chunking, with something like GhostTunnel if SSL
+or mTLS is needed). This will likely be the "best bet" for k8s deployments,
+unless someone wants to write a gRPC version.</p>
+<p>There's lots of possibilities, think "micro services" that run as shared
+objects plugged into an L3 data pipeline.</p>
+<p>They have access to Lua, too <code>:)</code></p>
+<p>Stay tuned!</p>
+
+    </main>
+    <footer>
+    Want To Help Fund Development?<br>
+    <div style="text-align: center; margin: 1em auto">
+      <a href="https://www.buymeacoffee.com/timthepost" id="donateLink" target="_blank">
+        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" title="I run on coffee!" style="height: 60px !important; width: 217px !important">
+      </a>
+    </div>
+    Built BBS Ugly ❤️ With BBS Love<br>
+    </footer>
+  
+
+</body></html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Splinter ⚡ A Vector Anti-Database &amp; Shared-Memory Substrate - Splinter Vector KV Substrate</title>
+    <meta name="color-scheme" content="dark">
+    <meta name="google-site-verification" content="VeO_yT6FjnKg9wV002inpWr2pvcVfbQRevxZ0hXfw0g">
+    <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/dark.css" onload="document.documentElement.classList.add('sl-theme-dark');">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="canonical" href="https://splinter-website.netlify.app/">
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
+    </script>
+  <meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Vector KV Substrate">
+<meta property="og:locale" content="en">
+<meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta property="og:url" content="https://splinter-website.netlify.app/">
+<meta property="og:image" content="https://splinter-website.netlify.app/uploads/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
+<meta name="robots" content="index, follow">
+<meta name="generator" content="Lume 3.1.1">
+<link rel="icon" sizes="32x32" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
+</head>
+  <body>
+    <main class="container">
+      <nav class="top-nav" id="nav">
+        <a href="/">INTRO</a>
+        <a href="/core">CORE</a>
+        <a href="/cli">CLI</a>
+        <a href="/shards">SHARDS</a>
+        <a href="/bindings">BINDINGS</a>
+        <a href="https://github.com/splinterhq/libsplinter/tree/main" target="_blank">CODE</a>
+      </nav>
+      <div style="clear: both"></div>
+      <h1>Splinter ⚡ A Vector Anti-Database &amp; Shared-Memory Substrate</h1>
+<p>Splinter is a minimalist, lock-free key-value manifold designed to facilitate
+high-frequency data ingestion and retrieval across disjointed runtimes. It is
+built on the belief that for local inter-process communication (IPC), the
+kernel’s networking stack is an expensive and unnecessary coupling.</p>
+<p>Splinter emerged out of frustration resulting from attempting to stretch tools
+over gaps that they simply were never designed to cover. It wasn't a question of
+more tuning; it was a need to cut out the socket layer and kernel arbitration
+completely.</p>
+<p>It was either completely dismantle and re-imagine SQLite, or write something
+completely different. Given the sparse availability of options, different seemed
+most beneficial to both the current need as well as the current ecosystem.</p>
+<h2>Design Philosophy: Low Complexity + Systemic Sympathy = Speed!</h2>
+<p>Modern software has become complacent with IAAS marketing, assuming that CPU
+cycles and memory bandwidth are infinite. We invoke help from the kernel's
+socket layer to transfer a value that we already have in memory to another
+region in the same physical memory as standard practice.</p>
+<p>And now we're doing that with 768-dimensional vectors 😱. Splinter is a gesture
+back in the direction of efficiency for systems development. Here are the core
+tenets that set it apart (<em><strong>aka:
+<a href="/splinter_performance">why Splinter is so damn fast</a></strong></em>):</p>
+<ul>
+<li><strong>Splinter Is a Passive Substrate:</strong> Splinter is not a daemon. It is a
+memory-mapped region that acts as a mutual option for every process on the
+system.</li>
+<li><strong>(DRYD) Zero-Copy Intent:</strong> <em>(D)on't (R)epeat (Y)our (D)ata.</em> In Splinter,
+information is never "sent"; it is published. Readers access the raw memory
+directly, crossing only the minimal checkpoints needed for safe coordination,
+eliminating the energetic tax of serialization and context switching.</li>
+<li><strong>Static Geometry:</strong> By using a fixed-geometry arena, Splinter eliminates the
+"learned negligence" of dynamic heap fragmentation and background garbage
+collection.</li>
+<li><strong>Lock-Free Practicality:</strong> No time is wasted acquiring blocking mutex locks;
+Splinter uses standard portable atomic sequence locks (<code>epoch</code>).</li>
+<li><strong>Unopinionated &amp; Agnostic:</strong> Implement LRU or TTL eviction how you like in a
+loadable shard, or no eviction at all. Splinter doesn't care.</li>
+</ul>
+<h3>The "Good Process Neighbor" Approach</h3>
+<p><em>(Even though technically only the CLI or client code is the process because
+Splinter itself is just a place, not a process)</em></p>
+<p>Splinter assumes <strong>informed intent</strong>. It does not try to outsmart the kernel
+with <code>O_DIRECT</code> or complex paging logic. It provides the metadata (<code>ctime</code>,
+<code>atime</code>, <code>epoch</code>) and the memory region, then gets out of your way. It is a tool
+for engineers who would rather spend their thermal budget on the math, not the
+management.</p>
+<p>Relational databases attempt to shield themselves from the kernel by trying to
+<em>be</em> the kernel. Splinter goes out of its way to not bother the kernel unless it
+must, and its logic shards inform the kernel of how the memory is intended for
+use at every step of the way. Here's
+<a href="/splinter_and_linux/">more about why Splinter and Linux are great friends</a>.</p>
+<h2>Supported Platforms &amp; Linkage</h2>
+<p>Splinter is designed to work on any modern GNU/Linux flavor. Windows users can
+use WSL with a slight penalty. MacOS requires some questionable shimming around
+the lack of <code>memfd</code> (forcing anonymous file descriptors to work), but it
+<em>should</em> otherwise function perfectly.</p>
+<p><strong>Optional Linkage (Enable during build):</strong></p>
+<ul>
+<li>NUMA (<code>libnuma-dev</code>) for NUMA affinity | <code>WITH_NUMA=1</code></li>
+<li>LUA (<code>lua5.4-dev</code>) for LUA integration | <code>WITH_LUA=1</code></li>
+<li>llama.cpp for the nomic inference shard | <code>WITH_LLAMA=1</code></li>
+<li>Valgrind (<code>libvalgrind-dev</code>) for tighter Valgrind test integration |
+<code>WITH_VALGRIND=1</code></li>
+</ul>
+<h2>Quick Start / Building &amp; Installing</h2>
+<p>If you want to build Splinter with "everything", just clone the repo, enter <code>libsplinter/</code>
+and just type <strong><code>make</code></strong>. This will configure a build with <code>-DWITH_NUMA=ON</code>, <code>-DWITH_LUA=ON</code>,
+<code>-DWITH_EMBEDDINGS=ON</code>, <code>-DWITH_LLAMA=ON</code> (for inference) and <code>-DWITH_RUST=ON</code> for bindings.</p>
+<p>This also means you need to have all of those prerequisites installed and want to build with
+them. If you want to pick and choose yourself, or enable nothing at all, then do this:</p>
+<pre><code class="language-bash hljs">git <span class="hljs-built_in">clone</span> git@bitbucket.org:tinkertim/libsplinter.git
+
+<span class="hljs-built_in">cd</span> libsplinter
+<span class="hljs-built_in">mkdir</span> build
+<span class="hljs-built_in">cd</span> build
+
+cmake -D{your flags} ..
+ctest --output-on-failure
+<span class="hljs-built_in">sudo</span> -E make install
+</code></pre>
+<p>The <code>-E</code> option tells Sudo to preserve your environment, which is required
+if you're running install targets with Rust enabled. Once you have installed,
+you can verify with <code>splinterctl --version</code>.</p>
+<p>From there, check out <a href="/cli">the CLI</a> and then <a href="/core">the C API</a> and
+<a href="/bindings">bindings</a>. You can find examples of most functions in
+<code>splinter_test.c</code> if the doxygen-style comments aren't enough.</p>
+<h2>Comparison With Related Tools</h2>
+<p>It's not entirely fair to compare active databases to Splinter because they are
+competing with their "hands tied" by mutexes and socket layers. Splinter
+deliberately eschews any calculation on-write that it can't do with simple
+bitwise math; Splinter <em><strong>tries</strong></em> to stay boring.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Splinter</th>
+<th>Traditional Vector DBs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Transport</strong></td>
+<td><code>memfd()</code> that degrades gracefully to <code>mmap()</code> (L3 Speed)</td>
+<td>TCP/gRPC (Network Stack)</td>
+</tr>
+<tr>
+<td><strong>Daemon</strong></td>
+<td>None (Passive)</td>
+<td>Active Service (Heavy)</td>
+</tr>
+<tr>
+<td><strong>Footprint</strong></td>
+<td>Static &amp; Deterministic</td>
+<td>Dynamic &amp; Volatile</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>~ 875 Lines of obsessively-optimized C (Will never exceed 999)</td>
+<td>100k+ Lines of Code</td>
+</tr>
+</tbody>
+</table>
+<p>Think about what you can do once TypeScript, Rust, Python and Go can all share
+the same address space and embeddings <strong>safely</strong>, without socket or even
+<code>memcpy()</code> overhead instead <code>:)</code>.</p>
+<h2>The Main Splinter Use Cases (What's it Good For?)</h2>
+<p>Splinter can be anything from a simple configuration store to a Rank-2 tensor
+model scaffold. It's designed for <strong>vector-heavy workflows</strong> like Artificial
+Intelligence (AI) inference or high-resolution physics and linguistic research.</p>
+<h4>1. High-Res Physics Of All Kinds</h4>
+<p>Do you like vectors? Of course you do.</p>
+<p>Splinter was built around the idea of capturing raw data exceptionally well
+while making backfill easy. It allows up to 64 signal groups per bus,
+ctags-style labeling, and built-in per-slot Bloom filters. Slot coupling allows
+for simple standard ordered sets (e.g. <code>foo_key.1</code>, <code>foo_key.2</code> for velocity and
+acceleration). You can record high-frequency data at L3 speeds without hardware
+aliasing, and have many keys in tandem with vectors all representing
+a single fraction of a second, if you have the room.</p>
+<p>Splinter was built primarily around <a href="https://www.gdeltproject.org/">GDELT</a>
+consumption, to set expectations. High-rank tensors? No problem, that's routine
+in the author's use and splinter makes sharing them fast and safe.</p>
+<h4>2. The Semantic Hippocampus (LLM Orchestrated Memory)</h4>
+<p>Splinter functions remarkably well as semantic short-to-long-term memory for
+Large Language Models. LRU-based movement helps "forget" ephemera quickly while
+making sure stuff that actually matters (as viewed by access time and epoch)
+settles into long-term memory. You can run inference directly on the bus,
+accessing embeddings using Splinter's supervised raw pointers so operations
+require zero <code>memcpy()</code>.</p>
+<p>Plus, well, "psychic search" being fundamental to design is quite attractive
+for such a feature. Inference (on the bus) via <code>.gguf</code> is included.</p>
+<h4>3. Configurations, Registries &amp; Edge Caching</h4>
+<p>Splinter's epochs and feature flags lend very well to application configuration
+on Linux systems. You can also compile Splinter to simply ignore embeddings
+(<code>WITH_EMBEDDINGS=0</code>) and use it as a local, socket-less cache server. (The
+author uses Splinter to trickle into Redis based on key activity).</p>
+<h4>4. Embedded IoT Use</h4>
+<p>Splinter is great for environmental loggers or system ring buffers because its
+static geometry is vastly superior for flash-based storage than relational
+databases. At just 875 lines of code, it stays in the "hot path" for most modern
+edge processors.</p>
+<h2>Exhaustive Feature Overview</h2>
+<h4>1. Performance &amp; Scale</h4>
+<ul>
+<li><strong>Throughput:</strong> Validated at <strong>3.2M+ ops/sec</strong> on early-gen, throttled
+consumer hardware. With proper NUMA configuration on modern fast hardware, it
+can reach near 500M ops/sec.</li>
+<li><strong>Latency:</strong> Resolves at L3 cache speeds by utilizing <code>memfd() / mmap()</code> for
+the primary transport.</li>
+<li><strong>Scalability:</strong> Supports disjointed MRMW (Multiple Reader, Multiple Writer)
+semantics via per-slot atomic sequence locks.</li>
+</ul>
+<h4>2. Vector &amp; Math Native</h4>
+<ul>
+<li><strong>Dimensional Storage:</strong> Native support for <strong>768-dimension vectors</strong>
+(optimized for Nomic v2/LLM embeddings).</li>
+<li><strong>In-Place Atomic Ops:</strong> Keys tagged as <code>BIGUINT</code> support atomic <code>INC</code>, <code>DEC</code>,
+<code>OR</code>, <code>XOR</code>, <code>AND</code>, and <code>NOT</code> operations directly in shared memory.</li>
+<li><strong>Tandem Keys:</strong> Multi-order support allows for atomic updates to related
+signals (e.g., <code>sensor.1</code>, <code>sensor.2</code>).</li>
+</ul>
+<h4>3. Mechanical Hygiene (Auto-Scrubbing)</h4>
+<p>Splinter offers three levels of sanitation to balance data integrity with
+computational thermodynamics:</p>
+<ul>
+<li><strong>None:</strong> Minimal movement; assumes readers strictly honor value length
+metadata.</li>
+<li><strong>Hybrid (Fast Mop):</strong> Zeroes the incoming byte length plus a <strong>64-byte
+aligned</strong> tail to satisfy SIMD/Vectorized loads.</li>
+<li><strong>Full (Boil):</strong> Zeroes the entire pre-allocated value region, ensuring
+absolute isolation for verifiable research.</li>
+</ul>
+<h4>4. The Signal Arena</h4>
+<ul>
+<li><strong>Pulse Groups:</strong> Up to 64 independent signal groups for <code>epoll()</code>-backed
+notifications.</li>
+<li><strong>Bloom Labeling:</strong> High-performance key tagging allows watchers to filter for
+specific signal "vibrations" without scanning the entire store.</li>
+</ul>
+<h4>5. Sidecars &amp; Loadable Shards</h4>
+<ul>
+<li><strong>Inference Included:</strong> Splinter ships with a tiny inference daemon
+(<code>splinference.cpp</code>) that loads Nomic Text locally and butlers embeddings for
+you on a defined signal group—with zero socket overhead.</li>
+<li><strong>Modular Logic:</strong> Side-load specialized C logic (DSP, ANN search, Inference)
+via <code>insmod</code>.</li>
+</ul>
+<h3>Contact The Author</h3>
+<p>I'm Tim Post (former Stack Overflow Employee &amp; Community Leader). You can reach
+me at <code>timthepost@protonmail.com</code> if you have questions.</p>
+
+    </main>
+    <footer>
+    Want To Help Fund Development?<br>
+    <div style="text-align: center; margin: 1em auto">
+      <a href="https://www.buymeacoffee.com/timthepost" id="donateLink" target="_blank">
+        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" title="I run on coffee!" style="height: 60px !important; width: 217px !important">
+      </a>
+    </div>
+    Built BBS Ugly ❤️ With BBS Love<br>
+    </footer>
+  
+
+</body></html>

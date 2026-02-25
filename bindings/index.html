@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Splinter Bindings For Other Languages - Splinter Vector KV Substrate</title>
+    <meta name="color-scheme" content="dark">
+    <meta name="google-site-verification" content="VeO_yT6FjnKg9wV002inpWr2pvcVfbQRevxZ0hXfw0g">
+    <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/dark.css" onload="document.documentElement.classList.add('sl-theme-dark');">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="canonical" href="https://splinter-website.netlify.app/bindings/">
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
+    </script>
+  <meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Vector KV Substrate">
+<meta property="og:locale" content="en">
+<meta property="og:description" content="Learn how to integrate Splinter with Python, Rust, Java, TypeScript, and Lua using Foreign Function Interfaces (FFI) for zero-copy shared memory access.">
+<meta property="og:url" content="https://splinter-website.netlify.app/bindings/">
+<meta property="og:image" content="https://splinter-website.netlify.app/uploads/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Learn how to integrate Splinter with Python, Rust, Java, TypeScript, and Lua using Foreign Function Interfaces (FFI) for zero-copy shared memory access.">
+<meta name="keywords" content="Foreign Function Interface, Language Bindings, Zero-Copy Access, Python ctypes, Java Panama FFM">
+<meta name="robots" content="index, follow">
+<meta name="generator" content="Lume 3.1.1">
+<link rel="icon" sizes="32x32" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
+</head>
+  <body>
+    <main class="container">
+      <nav class="top-nav" id="nav">
+        <a href="/">INTRO</a>
+        <a href="/core">CORE</a>
+        <a href="/cli">CLI</a>
+        <a href="/shards">SHARDS</a>
+        <a href="/bindings">BINDINGS</a>
+        <a href="https://github.com/splinterhq/libsplinter/tree/main" target="_blank">CODE</a>
+      </nav>
+      <div style="clear: both"></div>
+      <h1>Splinter Bindings For Other Languages</h1>
+<p>Splinter is a very "<code>dlopen()</code>-friendly" library; it doesn't require complex
+aggregation or construction, it doesn't implement callbacks and it doesn't rely
+on type-punning. Because of this, it tends to work without heroics on modern
+runtimes that can read Linux DSOs.</p>
+<p>If you benefit from Splinter commercially, please consider a small donation to
+the author to help fund independent research that drives Splinter's development
+and unrelenting standards for integration. If you could cover a book, or some
+lab supplies, hosting or just some pizza - I'm always grateful!</p>
+<div style="margin: 1em auto">
+  <a href="https://www.buymeacoffee.com/timthepost" id="donateLink" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Splinter's Author A Coffee" title="Splinter Development Requires Coffee" style="height: 60px !important; width: 217px !important">
+  </a>
+</div>
+<h2>A Note On "Far" Pointers</h2>
+<p>Looking at a region of memory through FFI is one point where that old
+<em>information superhighway</em> cliche actually bears meaning. When you can travel
+between borders freely, without a checkpoint, there's no barrier to speed.</p>
+<p>If you can drive very fast but have to slow down just a little for your license
+tag to be captured, or for a RFID fob to be read, then it's a slight choke
+point.</p>
+<p>If you have to completely stop, show your paperwork, declare everything in your
+possession and what you intend to do with it, and then get back on your way,
+it's a blocking clog.</p>
+<p>Foreign function interfaces each treat "unsafe" pointers in their own way. Those
+that essentially let data flow to -&gt; from them freely do exceptionally well with
+splinter. Those that don't still achieve massive speedup, but anywhere the
+client has to wait for a list of things (keys, embeddings, modules) will be
+slower than "single-shot" I/O.</p>
+<p><strong>Now, the supported languages:</strong></p>
+<h3>TypeScript (Deno FFI / Bun FFI)</h3>
+<p>There's an included class in <code>bindings/ts/splinter.ts</code> that you can import and
+just start using (Bun or Deno, it uses a factory to provide the correct
+bindings).</p>
+<p>You will likely see better performance with Bun's FFI for things like listing
+keys and tandem reads (due to pointer diligence), otherwise they're pretty much
+equal.</p>
+<p>Here's an example:</p>
+<pre><code class="language-ts hljs language-typescript"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">Splinter</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">"./splinter.ts"</span>;
+
+<span class="hljs-comment">// open the bus</span>
+<span class="hljs-keyword">const</span> store = <span class="hljs-title class_">Splinter</span>.<span class="hljs-title function_">connect</span>(<span class="hljs-string">"nomic_text"</span>);
+
+<span class="hljs-comment">// write a value</span>
+store.<span class="hljs-title function_">set</span>(<span class="hljs-string">"ts_key"</span>, <span class="hljs-string">"Hello from TypeScript!"</span>);
+
+<span class="hljs-comment">// read a value</span>
+<span class="hljs-keyword">const</span> val = store.<span class="hljs-title function_">getString</span>(<span class="hljs-string">"ts_key"</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Value: <span class="hljs-subst">${val}</span>`</span>);
+
+<span class="hljs-comment">// check an epoch (seqlock verification)</span>
+<span class="hljs-keyword">const</span> epoch = store.<span class="hljs-title function_">getEpoch</span>(<span class="hljs-string">"ts_key"</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Current Epoch: <span class="hljs-subst">${epoch}</span>`</span>);
+
+<span class="hljs-comment">// not absolutely necessary unless you want to</span>
+<span class="hljs-comment">// open another store</span>
+store.<span class="hljs-title function_">close</span>();
+</code></pre>
+<p>The class contains the basics to get you started. If you want more of the
+library exposed in the class, just upload the class itself, <code>splinter.c</code> and
+<code>splinter.h</code> to any decent code LLM and tell it what additional methods you want
+to include.</p>
+<p>The bare minimum is just sort of how we do things in the main distribution.</p>
+<h3>Rust (Identical To C Build)</h3>
+<p>Rust is (aside from C/C++) absolutely the easiest, most straight-forward and
+efficient way to use Splinter:</p>
+<pre><code class="language-rust hljs"><span class="hljs-keyword">use</span> std::ffi::{CString, CStr};
+<span class="hljs-keyword">use</span> std::slice;
+<span class="hljs-keyword">use</span> std::<span class="hljs-type">str</span>;
+
+<span class="hljs-comment">// the build/ directory has the crates</span>
+<span class="hljs-comment">// they need a maintainer</span>
+<span class="hljs-comment">// wink wink</span>
+<span class="hljs-keyword">use</span> splinter_memory::*; 
+
+<span class="hljs-keyword">fn</span> <span class="hljs-title function_">main</span>() {
+    <span class="hljs-comment">// Rust strings must be converted to C-compatible null-terminated strings</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">bus_name</span> = CString::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">"nomic_text"</span>).<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">"CString::new failed"</span>);
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">key_name</span> = CString::<span class="hljs-title function_ invoke__">new</span>(<span class="hljs-string">"rust_test_key"</span>).<span class="hljs-title function_ invoke__">expect</span>(<span class="hljs-string">"CString::new failed"</span>);
+    
+    <span class="hljs-comment">// the test manifold payload</span>
+    <span class="hljs-keyword">let</span> <span class="hljs-variable">payload</span> = <span class="hljs-string">b"Hello from Rust on the bare metal!"</span>;
+
+    <span class="hljs-comment">// any interaction with C FFI requires an unsafe block</span>
+    <span class="hljs-keyword">unsafe</span> {
+        <span class="hljs-comment">// 1. Connect to the Splinter bus</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-title function_ invoke__">splinter_open</span>(bus_name.<span class="hljs-title function_ invoke__">as_ptr</span>()) != <span class="hljs-number">0</span> {
+            <span class="hljs-built_in">panic!</span>(<span class="hljs-string">"Failed to connect to Splinter bus. Is it initialized?"</span>);
+        }
+        <span class="hljs-built_in">println!</span>(<span class="hljs-string">"Connected to Splinter substrate!"</span>);
+
+        <span class="hljs-comment">// publish</span>
+        <span class="hljs-comment">// we cast the Rust byte array pointer to a C void pointer</span>
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">rc</span> = <span class="hljs-title function_ invoke__">splinter_set</span>(
+            key_name.<span class="hljs-title function_ invoke__">as_ptr</span>(), 
+            payload.<span class="hljs-title function_ invoke__">as_ptr</span>() <span class="hljs-keyword">as</span> *<span class="hljs-keyword">const</span> std::ffi::c_void, 
+            payload.<span class="hljs-title function_ invoke__">len</span>()
+        );
+        
+        <span class="hljs-keyword">if</span> rc != <span class="hljs-number">0</span> {
+            <span class="hljs-built_in">eprintln!</span>(<span class="hljs-string">"Failed to write to Splinter slot."</span>);
+        }
+
+        <span class="hljs-comment">// the zero-copy read</span>
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">out_sz</span>: <span class="hljs-type">usize</span> = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut </span><span class="hljs-variable">out_epoch</span>: <span class="hljs-type">u64</span> = <span class="hljs-number">0</span>;
+
+        <span class="hljs-keyword">let</span> <span class="hljs-variable">raw_ptr</span> = <span class="hljs-title function_ invoke__">splinter_get_raw_ptr</span>(
+            key_name.<span class="hljs-title function_ invoke__">as_ptr</span>(),
+            &amp;<span class="hljs-keyword">mut</span> out_sz,
+            &amp;<span class="hljs-keyword">mut</span> out_epoch
+        );
+
+        <span class="hljs-keyword">if</span> !raw_ptr.<span class="hljs-title function_ invoke__">is_null</span>() {
+            <span class="hljs-comment">// cast the C pointer directly into a Rust slice.</span>
+            <span class="hljs-comment">// the Rust compiler now treats the L3 cache memory as a standard </span>
+            <span class="hljs-comment">// byte slice, tracking its lifetime safely. </span>
+            <span class="hljs-comment">// NO memcpy()!</span>
+            <span class="hljs-keyword">let</span> <span class="hljs-variable">data_slice</span> = slice::<span class="hljs-title function_ invoke__">from_raw_parts</span>(raw_ptr <span class="hljs-keyword">as</span> *<span class="hljs-keyword">const</span> <span class="hljs-type">u8</span>, out_sz);
+            
+            <span class="hljs-comment">// convert the raw bytes back to a UTF-8 string for printing</span>
+            <span class="hljs-keyword">match</span> <span class="hljs-type">str</span>::<span class="hljs-title function_ invoke__">from_utf8</span>(data_slice) {
+                <span class="hljs-title function_ invoke__">Ok</span>(msg) =&gt; <span class="hljs-built_in">println!</span>(<span class="hljs-string">"Epoch {} -&gt; Read: {}"</span>, out_epoch, msg),
+                <span class="hljs-title function_ invoke__">Err</span>(e) =&gt; <span class="hljs-built_in">eprintln!</span>(<span class="hljs-string">"Invalid UTF-8 sequence: {}"</span>, e),
+            }
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">println!</span>(<span class="hljs-string">"Key not found or empty."</span>);
+        }
+
+        <span class="hljs-comment">// politely disconnect</span>
+        <span class="hljs-title function_ invoke__">splinter_close</span>();
+    }
+}
+</code></pre>
+<p>Rust is not Splinter's primary dev's primary language, but something like that
+wrapped in a struct with <code>sync</code> and <code>send</code> could work? A better example would be
+appreciated.</p>
+<h3>Python3x (Native Ctypes)</h3>
+<p>Splinter abhors unnecessary data duplication. It's actually a really good
+GIL-bypass for vector data. Because Splinter uses <code>mmap()</code> to act as a passive
+substrate, Python can use its built-in <code>ctypes</code> library to cast a Splinter slot
+directly into a <code>NumPy</code> array or a native Python memory view:</p>
+<pre><code class="language-python hljs"><span class="hljs-keyword">import</span> ctypes
+<span class="hljs-keyword">import</span> os
+
+<span class="hljs-comment"># load the shared library</span>
+lib_path = os.path.abspath(<span class="hljs-string">"./libsplinter.so"</span>)
+splinter = ctypes.CDLL(lib_path)
+
+<span class="hljs-comment"># define argument and return types for the FFI boundary</span>
+splinter.splinter_open.argtypes = [ctypes.c_char_p]
+splinter.splinter_open.restype = ctypes.c_int
+
+splinter.splinter_set.argtypes = [ctypes.c_char_p, ctypes.c_void_p, ctypes.c_size_t]
+splinter.splinter_set.restype = ctypes.c_int
+
+<span class="hljs-comment"># splinter_get_raw_ptr(const char *key, size_t *out_sz, uint64_t *out_epoch)</span>
+splinter.splinter_get_raw_ptr.argtypes = [
+    ctypes.c_char_p, 
+    ctypes.POINTER(ctypes.c_size_t), 
+    ctypes.POINTER(ctypes.c_uint64)
+]
+splinter.splinter_get_raw_ptr.restype = ctypes.c_void_p
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SplinterBus</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, bus_name: <span class="hljs-built_in">str</span></span>):
+        <span class="hljs-keyword">if</span> splinter.splinter_open(bus_name.encode(<span class="hljs-string">'utf-8'</span>)) != <span class="hljs-number">0</span>:
+            <span class="hljs-keyword">raise</span> RuntimeError(<span class="hljs-string">f"Failed to connect to Splinter bus: <span class="hljs-subst">{bus_name}</span>"</span>)
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">set_string</span>(<span class="hljs-params">self, key: <span class="hljs-built_in">str</span>, value: <span class="hljs-built_in">str</span></span>):
+        data = value.encode(<span class="hljs-string">'utf-8'</span>)
+        splinter.splinter_set(key.encode(<span class="hljs-string">'utf-8'</span>), data, <span class="hljs-built_in">len</span>(data))
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_embeddings_zero_copy</span>(<span class="hljs-params">self, key: <span class="hljs-built_in">str</span>, dimensions=<span class="hljs-number">768</span></span>):
+        <span class="hljs-string">"""
+        Reads 768 floats directly from the L3 cache without copying bytes!
+        """</span>
+        out_sz = ctypes.c_size_t(<span class="hljs-number">0</span>)
+        out_epoch = ctypes.c_uint64(<span class="hljs-number">0</span>)
+        
+        <span class="hljs-comment"># get the raw memory pointer from the Splinter manifold</span>
+        raw_ptr = splinter.splinter_get_raw_ptr(
+            key.encode(<span class="hljs-string">'utf-8'</span>), 
+            ctypes.byref(out_sz), 
+            ctypes.byref(out_epoch)
+        )
+        
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> raw_ptr:
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+            
+        <span class="hljs-comment"># cast the raw memory address directly into a Python Float Array.</span>
+        <span class="hljs-comment"># this is true zero-copy. If the C daemon updates the slot, </span>
+        <span class="hljs-comment"># this array updates instantly because it points to the same RAM.</span>
+        FloatArrayType = ctypes.c_float * dimensions
+        <span class="hljs-keyword">return</span> ctypes.cast(raw_ptr, ctypes.POINTER(FloatArrayType)).contents
+
+<span class="hljs-comment"># Usage:</span>
+<span class="hljs-comment"># bus = SplinterBus("nomic_text")</span>
+<span class="hljs-comment"># vec = bus.get_embeddings_zero_copy("npc_dialogue_vector")</span>
+<span class="hljs-comment"># print(f"Vector Head: {vec[0]}, {vec[1]}, {vec[2]}")</span>
+</code></pre>
+<p>In fact, slow Python scrapers can trickle data in while the very tiny
+<code>splinference</code> Nomic Text inference engine (included) deposits vectors silently
+(no <code>memcpy()</code> in the background either) as it chugs along.</p>
+<p>Information Physics (from social data) is often done this way (GDELT, RSS, Etc)
+and Splinter was written specifically to handle that.</p>
+<h3>Java (Panama)</h3>
+<p>Because Splinter utilizes a static memory geometry mapped directly via the OS,
+you can use Java's new MemorySegment and Arena classes to read and write directly to
+Splinter:</p>
+<pre><code class="language-java hljs"><span class="hljs-keyword">import</span> java.lang.foreign.*;
+<span class="hljs-keyword">import</span> java.lang.invoke.MethodHandle;
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SplinterWire</span> {
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Linker</span> <span class="hljs-variable">linker</span> <span class="hljs-operator">=</span> Linker.nativeLinker();
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">SymbolLookup</span> <span class="hljs-variable">lib</span> <span class="hljs-operator">=</span> SymbolLookup.libraryLookup(<span class="hljs-string">"./libsplinter.so"</span>, Arena.global());
+
+    <span class="hljs-comment">// Bindings to the C functions</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">MethodHandle</span> <span class="hljs-variable">splinterOpen</span> <span class="hljs-operator">=</span> linker.downcallHandle(
+        lib.find(<span class="hljs-string">"splinter_open"</span>).get(),
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.ADDRESS)
+    );
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">MethodHandle</span> <span class="hljs-variable">splinterGetRawPtr</span> <span class="hljs-operator">=</span> linker.downcallHandle(
+        lib.find(<span class="hljs-string">"splinter_get_raw_ptr"</span>).get(),
+        FunctionDescriptor.of(ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS, ValueLayout.ADDRESS)
+    );
+
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Throwable {
+        <span class="hljs-comment">// open the bus (Off-heap string allocation)</span>
+        <span class="hljs-keyword">try</span> (<span class="hljs-type">Arena</span> <span class="hljs-variable">arena</span> <span class="hljs-operator">=</span> Arena.ofConfined()) {
+            <span class="hljs-type">MemorySegment</span> <span class="hljs-variable">busName</span> <span class="hljs-operator">=</span> arena.allocateFrom(<span class="hljs-string">"nomic_text"</span>);
+            <span class="hljs-type">int</span> <span class="hljs-variable">rc</span> <span class="hljs-operator">=</span> (<span class="hljs-type">int</span>) splinterOpen.invokeExact(busName);
+            <span class="hljs-keyword">if</span> (rc != <span class="hljs-number">0</span>) {
+                System.out.println(<span class="hljs-string">"Failed to open Splinter bus."</span>);
+                <span class="hljs-keyword">return</span>;
+            }
+
+            System.out.println(<span class="hljs-string">"Connected to Splinter substrate!"</span>);
+
+            <span class="hljs-comment">// fetch the Raw Pointer (Zero-Copy)</span>
+            <span class="hljs-type">MemorySegment</span> <span class="hljs-variable">key</span> <span class="hljs-operator">=</span> arena.allocateFrom(<span class="hljs-string">"nomic_test_key"</span>);
+            <span class="hljs-type">MemorySegment</span> <span class="hljs-variable">outSz</span> <span class="hljs-operator">=</span> arena.allocate(ValueLayout.JAVA_LONG);
+            <span class="hljs-type">MemorySegment</span> <span class="hljs-variable">outEpoch</span> <span class="hljs-operator">=</span> arena.allocate(ValueLayout.JAVA_LONG);
+
+            <span class="hljs-comment">// This returns a MemorySegment pointing directly into /dev/shm</span>
+            <span class="hljs-type">MemorySegment</span> <span class="hljs-variable">rawDataPtr</span> <span class="hljs-operator">=</span> (MemorySegment) splinterGetRawPtr.invokeExact(key, outSz, outEpoch);
+
+            <span class="hljs-keyword">if</span> (!rawDataPtr.equals(MemorySegment.NULL)) {
+                <span class="hljs-type">long</span> <span class="hljs-variable">size</span> <span class="hljs-operator">=</span> outSz.get(ValueLayout.JAVA_LONG, <span class="hljs-number">0</span>);
+                <span class="hljs-type">long</span> <span class="hljs-variable">epoch</span> <span class="hljs-operator">=</span> outEpoch.get(ValueLayout.JAVA_LONG, <span class="hljs-number">0</span>);
+
+                <span class="hljs-comment">// read the memory DIRECTLY from the C bus. </span>
+                <span class="hljs-comment">// the JVM Garbage Collector never sees this data, so it can never cause a lag spike.</span>
+                <span class="hljs-comment">// we reinterpret the zero-length pointer to the actual size of the data.</span>
+                <span class="hljs-type">MemorySegment</span> <span class="hljs-variable">readableData</span> <span class="hljs-operator">=</span> rawDataPtr.reinterpret(size);
+                
+                <span class="hljs-comment">// if a string:</span>
+                <span class="hljs-type">String</span> <span class="hljs-variable">val</span> <span class="hljs-operator">=</span> readableData.getString(<span class="hljs-number">0</span>);
+                System.out.println(<span class="hljs-string">"Epoch "</span> + epoch + <span class="hljs-string">" -&gt; Read: "</span> + val);
+                
+                <span class="hljs-comment">// if a vector, then it would be:</span>
+                <span class="hljs-comment">// float firstDimension = readableData.get(ValueLayout.JAVA_FLOAT, 0);</span>
+            }
+        }
+    }
+}
+</code></pre>
+<p>Because the data lives in Splinter's static slots and not the JVM heap, you can
+cache gigabytes of Rank-2 tensors without ever triggering a single Garbage
+Collection pause.</p>
+<p>Splinter also allows atomic INC, DEC, AND, and OR bitwise operations on BIGUINT
+flags directly in shared memory, allowing thousands of Java threads to
+coordinate state without relying on slow Java-level synchronized locks.</p>
+<p>And, you still have the per-slot feature flags. It's made for IPC without tick
+rate impacts, and we count inference as IPC.</p>
+<h3>Lua</h3>
+<p>Just like you'd expect, mostly:</p>
+<pre><code class="language-lua hljs"><span class="hljs-keyword">local</span> result = bus.set(<span class="hljs-string">"test_multi"</span>, multi) <span class="hljs-keyword">or</span> <span class="hljs-number">-1</span>
+<span class="hljs-built_in">print</span>(result)
+
+bus.set(<span class="hljs-string">"test_integer"</span>, <span class="hljs-number">1</span>)
+bus.<span class="hljs-built_in">math</span>(<span class="hljs-string">"test_integer"</span>, <span class="hljs-string">"inc"</span>, <span class="hljs-number">65535</span>)
+</code></pre>
+<p>See <code>splinter_cli_cmd_lua.c</code> for the actual coupling and breakout box to add
+more definitions and functionality.</p>
+<p>If someone wants to expose the whole store as a table in Lua, I'd love a patch!</p>
+<h3>Bash / Shell</h3>
+<p>Just use <code>splinterctl</code> or <code>splinterpctl</code> respectively. There's also
+<code>splinter_cli</code> and <code>splinterp_cli</code> for interactive use.</p>
+<p>See the <a href="/cli">CLI</a> page for more information.</p>
+
+    </main>
+    <footer>
+    Want To Help Fund Development?<br>
+    <div style="text-align: center; margin: 1em auto">
+      <a href="https://www.buymeacoffee.com/timthepost" id="donateLink" target="_blank">
+        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" title="I run on coffee!" style="height: 60px !important; width: 217px !important">
+      </a>
+    </div>
+    Built BBS Ugly ❤️ With BBS Love<br>
+    </footer>
+  
+
+</body></html>

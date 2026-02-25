@@ -1,0 +1,2 @@
+
+Sitemap: https://splinter-website.netlify.app/sitemap.xml

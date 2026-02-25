@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Splinter's CLI and 'splinterctl' Utilities - Splinter Vector KV Substrate</title>
+    <meta name="color-scheme" content="dark">
+    <meta name="google-site-verification" content="VeO_yT6FjnKg9wV002inpWr2pvcVfbQRevxZ0hXfw0g">
+    <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/dark.css" onload="document.documentElement.classList.add('sl-theme-dark');">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="canonical" href="https://splinter-website.netlify.app/cli/">
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
+    </script>
+  <meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Vector KV Substrate">
+<meta property="og:locale" content="en">
+<meta property="og:description" content="Discover Splinter's extensible command-line interface and splinterctl utilities for managing shared-memory stores, running Lua scripts, and more.">
+<meta property="og:url" content="https://splinter-website.netlify.app/cli/">
+<meta property="og:image" content="https://splinter-website.netlify.app/uploads/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Discover Splinter's extensible command-line interface and splinterctl utilities for managing shared-memory stores, running Lua scripts, and more.">
+<meta name="keywords" content="splinterctl, Command Line Interface, Store Management, Lua Scripting, REPL">
+<meta name="robots" content="index, follow">
+<meta name="generator" content="Lume 3.1.1">
+<link rel="icon" sizes="32x32" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
+</head>
+  <body>
+    <main class="container">
+      <nav class="top-nav" id="nav">
+        <a href="/">INTRO</a>
+        <a href="/core">CORE</a>
+        <a href="/cli">CLI</a>
+        <a href="/shards">SHARDS</a>
+        <a href="/bindings">BINDINGS</a>
+        <a href="https://github.com/splinterhq/libsplinter/tree/main" target="_blank">CODE</a>
+      </nav>
+      <div style="clear: both"></div>
+      <h1>Splinter's CLI and 'splinterctl' Utilities</h1>
+<h2>"CLI" Means <code>splinter_cli</code> and <code>splinterctl</code>.</h2>
+<p>Splinter comes with an extensible production-grade CLI tool that lets you manage
+and interact with stores by hand or through the use of simple shell scripts.
+Splinter's CLI has robust features like:</p>
+<ul>
+<li>Command auto completion</li>
+<li>Built-in help</li>
+<li>Easy regex filtering</li>
+<li>Export options</li>
+<li>Access to almost all code possibilities</li>
+<li>Run Lua</li>
+<li>REPL or One-shot.</li>
+</ul>
+<h2><code>splinterctl</code> vs <code>splinter_cli</code></h2>
+<p>The <code>splinter_cli</code> program slightly (and safely, with bounds checking) alters
+its behavior if invoked as <code>splinterctl</code> so that interactive-mode (the REPL) is
+not entered. This allows you to run any command you could in <code>splinter_cli</code>
+manually with <code>splinterctl</code> through a script.</p>
+<h2>Command Modules</h2>
+<p>The following modules (commands) are available in interactive as well as
+non-interactive mode. To see them, run <code>splinterctl --list</code></p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>clear</td>
+<td>Clears the screen</td>
+</tr>
+<tr>
+<td>cls</td>
+<td>Alias of 'clear'</td>
+</tr>
+<tr>
+<td>config</td>
+<td>Access Splinter bus and slot metadata</td>
+</tr>
+<tr>
+<td>get</td>
+<td>Retrieve the value of a key in the store</td>
+</tr>
+<tr>
+<td>head</td>
+<td>Retrieve just the metadata of a key in the store</td>
+</tr>
+<tr>
+<td>help</td>
+<td>Help with commands and features</td>
+</tr>
+<tr>
+<td>hist</td>
+<td>View and clear command history</td>
+</tr>
+<tr>
+<td>list</td>
+<td>List keys in the current store</td>
+</tr>
+<tr>
+<td>set</td>
+<td>Set a key in the store to a specified value</td>
+</tr>
+<tr>
+<td>unset</td>
+<td>Unset a key in the store (deletes the key)</td>
+</tr>
+<tr>
+<td>use</td>
+<td>Opens a Splinter store by name or path</td>
+</tr>
+<tr>
+<td>watch</td>
+<td>Observes a key for changes and prints updated contents</td>
+</tr>
+<tr>
+<td>init</td>
+<td>Initialize Splinter stores</td>
+</tr>
+<tr>
+<td>export</td>
+<td>Export Splinter data in various formats</td>
+</tr>
+<tr>
+<td>type</td>
+<td>Display or set the named slot type for a key</td>
+</tr>
+<tr>
+<td>math</td>
+<td>Perform incr/decr and bitwise ops on named biguint keys</td>
+</tr>
+<tr>
+<td>label</td>
+<td>Label a key with bits for its bloom filter</td>
+</tr>
+<tr>
+<td>lua</td>
+<td>Run a lua script</td>
+</tr>
+<tr>
+<td>orders</td>
+<td>Manage standard vector orders of a key</td>
+</tr>
+</tbody>
+</table>
+<h2>Custom Loadable Modules</h2>
+<p><a href="/shards">Shards</a> are planned to launch in the very near future. Some accounting
+and intent advertisement details are still being investigated, and then code
+should hit once we have a working system.</p>
+<p>They'll let you isolate logic into on-demand loadable components with sub-ms
+initialization; similar to Linux kernel modules (in fact, <code>insmod</code> and <code>rmmod</code>
+are the management tools in the working prototype).</p>
+<h2>Command Line Use</h2>
+<p>Take a look at the output of <code>splinterctl --help</code> to see the available options
+you can set for automation.</p>
+<p>Here is how you can use shell to create a new store, then automatically use it
+every time you run <code>splinterctl</code>:</p>
+<pre><code class="language-bash hljs">% splinterctl --init test_store
+Initializing store: test_store
+  - Slots: 1024 (4096 bytes each, 64 byte alignment)
+  - Value Arena: 4194304 bytes, SRS: 7475328 bytes (~7.13 MB)
+
+% <span class="hljs-built_in">alias</span> splinterctl=<span class="hljs-string">"splinterctl --use test_store"</span>
+
+% splinterctl list
+Key Name                          | Epoch      | Val Len    | Named Type     
+-------------------------------------------------------------------------------------
+
+% splinterctl <span class="hljs-built_in">set</span> foo_key <span class="hljs-string">"A perfectly good value for foo."</span>
+% splinterctl get foo_key
+31:A perfectly good value <span class="hljs-keyword">for</span> foo.
+
+% splinterctl list
+Key Name                          | Epoch      | Val Len    | Named Type     
+-------------------------------------------------------------------------------------
+foo_key                           | 2          | 31         | SPL_SLOT_TYPE_VOID
+</code></pre>
+<p>You can also prefix keys with  namespace automatically. Passing <code>--prefix foo::bar::</code>
+to <code>splinterctl set zoo monkey</code> would translate to <code>set foo::bar::zoo monkey</code>, likewise
+for unset.</p>
+<p>If you want to persist the in-memory created store, you can simply run:</p>
+<pre><code class="language-bash hljs"><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/shm/test_store of=/path/to/save.spl bs=64
+</code></pre>
+<p>The same can be used to move a store from storage back to <code>/dev/shm</code>.</p>
+<p>Be sure to check out <code>lua</code> for scripting support (there's a test script in the
+repo), and <code>splinter_cli</code> directly for the interactive version with a few artful
+<code>@antirez</code> creature comforts.</p>
+<h2>Source Code</h2>
+<p>The CLI sources are <code>splinter_cli_*.c</code> as well as their included headers, which
+are named similarly. It was inspired by
+<a href="https://www.helenos.org/index.fcgi/browser/mainline/uspace/app/bdsh">BDSH</a>,
+which the author previously wrote for HelenOS.</p>
+
+    </main>
+    <footer>
+    Want To Help Fund Development?<br>
+    <div style="text-align: center; margin: 1em auto">
+      <a href="https://www.buymeacoffee.com/timthepost" id="donateLink" target="_blank">
+        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" title="I run on coffee!" style="height: 60px !important; width: 217px !important">
+      </a>
+    </div>
+    Built BBS Ugly ❤️ With BBS Love<br>
+    </footer>
+  
+
+</body></html>

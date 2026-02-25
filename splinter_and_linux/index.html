@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Why Linux, 64 Bit Architecture and Splinter Form a Symphony - Splinter Vector KV Substrate</title>
+    <meta name="color-scheme" content="dark">
+    <meta name="google-site-verification" content="VeO_yT6FjnKg9wV002inpWr2pvcVfbQRevxZ0hXfw0g">
+    <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/dark.css" onload="document.documentElement.classList.add('sl-theme-dark');">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="canonical" href="https://splinter-website.netlify.app/splinter_and_linux/">
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
+    </script>
+  <meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Vector KV Substrate">
+<meta property="og:locale" content="en">
+<meta property="og:description" content="Explore the mechanical sympathy between Splinter and the Linux kernel, leveraging mmap, transparent huge pages, and 64-byte cache line alignment.">
+<meta property="og:url" content="https://splinter-website.netlify.app/splinter_and_linux/">
+<meta property="og:image" content="https://splinter-website.netlify.app/uploads/favicon.svg">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Explore the mechanical sympathy between Splinter and the Linux kernel, leveraging mmap, transparent huge pages, and 64-byte cache line alignment.">
+<meta name="keywords" content="Linux Kernel, Memory Mapped Files, Transparent Huge Pages, Cache Line Alignment, Zero-Copy Efficiency">
+<meta name="robots" content="index, follow">
+<meta name="generator" content="Lume 3.1.1">
+<link rel="icon" sizes="32x32" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
+</head>
+  <body>
+    <main class="container">
+      <nav class="top-nav" id="nav">
+        <a href="/">INTRO</a>
+        <a href="/core">CORE</a>
+        <a href="/cli">CLI</a>
+        <a href="/shards">SHARDS</a>
+        <a href="/bindings">BINDINGS</a>
+        <a href="https://github.com/splinterhq/libsplinter/tree/main" target="_blank">CODE</a>
+      </nav>
+      <div style="clear: both"></div>
+      <h1>Why Linux, 64 Bit Architecture and Splinter Form a Symphony</h1>
+<p>Splinter is designed with <strong>Mechanical Sympathy</strong> for the Linux kernel. By
+rejecting heavy abstractions, Splinter works with the grain of the OS rather
+than against it.</p>
+<p>This design isn't rooted <em>solely</em> in the spirit of cooperation; Splinter is
+designed to excite the CPU as little as mechanically and physically possible in
+an effort to reduce experimental noise.</p>
+<h3>1. The Symbiosis of <code>memfd() / mmap()</code> and the Page Cache</h3>
+<p>Instead of implementing a custom buffer manager (which often fights the kernel),
+Splinter uses <code>mmap()</code> to map the store directly into the process address space.</p>
+<ul>
+<li>
+<p><strong>Zero-Copy Efficiency</strong>: When a process reads a Splinter slot, it is reading
+directly from the kernel's Page Cache. No data is copied from kernel-space to
+user-space.</p>
+</li>
+<li>
+<p><strong>Intelligent Eviction</strong>: By not locking memory, you allow the Linux VMM to
+decide which parts of the Splinter manifold should stay in RAM based on actual
+system pressure. If a slot isn't accessed, the kernel can swap it out
+gracefully without Splinter ever needing to "know."</p>
+</li>
+</ul>
+<h3>2. Static Geometry &amp; Huge Pages</h3>
+<p>Modern Linux kernels use <strong>Transparent Huge Pages (THP)</strong> to reduce the overhead
+of memory mapping.</p>
+<ul>
+<li>
+<p><strong>Predictable Layout</strong>: Because Splinter uses a fixed-geometry arena, the
+kernel can easily identify large, contiguous blocks of memory.</p>
+</li>
+<li>
+<p><strong>TLB Optimization</strong>: The CPU’s Translation Lookaside Buffer (TLB) can map
+millions of Splinter operations using just a few "Huge" entries, significantly
+reducing the "address translation tax" during high-frequency ingestion.</p>
+</li>
+</ul>
+<h3>3. 64-Byte Alignment: The L1 Cache Sweet Spot</h3>
+<p>The Linux scheduler and the CPU hardware move data in <strong>64-byte cache lines</strong>.
+Splinter aligns every slot and its 64-bit epoch to these boundaries. This
+prevents "Split Locks" and False Sharing, allowing multiple CPU cores to strike
+the bus simultaneously without bruising each other's cache. We call this <em>atomic
+harmony</em>.</p>
+<h3>4. The "Hybrid Mop" as an I/O Governor</h3>
+<p>The Linux kernel's write-back threads (<code>pdflush</code>/<code>kswapd</code>) love predictable
+patterns.</p>
+<ul>
+<li>
+<p><strong>Write Combining</strong>: When <strong>Hybrid Scrub</strong> zeroes out the 64-byte tail of a
+write, it signals the CPU and the kernel that a full cache line is "dirty" and
+ready for a burst write.</p>
+</li>
+<li>
+<p><strong>Pacing Persistence</strong>: This minor "work" prevents the writer from
+overwhelming the kernel's dirty-page limit, leading to the <strong>6x throughput
+increase</strong> observed in persistent benchmarks.</p>
+</li>
+</ul>
+<h3>5. Deterministic Reliability</h3>
+<p>Splinter doesn't use complex "journaling" or "WAL" (Write-Ahead Logging) that
+adds I/O wait.</p>
+<ul>
+<li>
+<p><strong>Persistence via Physics</strong>: Because Splinter is a simple memory-mapped file,
+a "save" is just the kernel's standard way of flushing a dirty page to disk.</p>
+</li>
+<li>
+<p><strong>Unix Tool Synergy</strong>: You don't need a proprietary backup tool. Standard
+Linux utilities like <code>dd</code>, <code>cp</code>, and <code>btrfs send</code> work natively with Splinter
+because, to Linux, it's just a file.</p>
+</li>
+</ul>
+<p>Splinter achieves quality symbiosis with Linux because it provides <strong>informed
+intent</strong>. It gives the kernel a clean, aligned, and static structure, then lets
+the VMM do what it has been optimized to do for 30 years: move pages
+efficiently. It doesn't try to call the shots because it operates in a way where
+it doesn't <em>need</em> to.</p>
+<p>Next, you might like to see <a href="/splinter_performance">some math behind splinter's performance</a>.</p>
+
+    </main>
+    <footer>
+    Want To Help Fund Development?<br>
+    <div style="text-align: center; margin: 1em auto">
+      <a href="https://www.buymeacoffee.com/timthepost" id="donateLink" target="_blank">
+        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" title="I run on coffee!" style="height: 60px !important; width: 217px !important">
+      </a>
+    </div>
+    Built BBS Ugly ❤️ With BBS Love<br>
+    </footer>
+  
+
+</body></html>
