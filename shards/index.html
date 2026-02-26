@@ -80,15 +80,12 @@ or production inference loads. Shards are a great compromise answer.</p>
 design have been mostly finalized. CPU use intent is also being factored in.</p>
 <p>Shards are expected to 'land' sometime in March 2026.</p>
 <h2>What Can We *DO* With Them, Though?!</h2>
-<p>Practical examples would be sidecar analysis, backfill, a shard could even
-expose the store as a RESTful interface (similar to how it's currently done
-with <code>Deno -&gt; FFI -&gt; Oak</code> or even <code>Bun -&gt; FFI -&gt; Express</code>, except we remove
-runtimes and TypeScript from the service loop by doing it with C and a micro
-http server that supports chunking, with something like GhostTunnel if SSL
-or mTLS is needed). This will likely be the "best bet" for k8s deployments,
-unless someone wants to write a gRPC version.</p>
-<p>There's lots of possibilities, think "micro services" that run as shared
-objects plugged into an L3 data pipeline.</p>
+<p>Practical examples would be sidecar analysis, sidecar inference, backfill, a shard
+could even expose the store as a RESTful interface. <code>splinference.cpp</code> is an example
+of running a llama.cpp style inference loop without sockets or moving memory around;
+it would be even more valuable as a loadable object that could be run on-demand in
+the CLI. Shards can service signal groups with whatever you need them to do right after
+your data lands.</p>
 <p>Think what you could do with something like <a href="https://github.com/bytedance/sonic">Sonic</a>
 in a sidecar serializing your data asynchronously without socket, mutex
 or even <code>memcpy()</code> penalty. You can write shards in Go, Rust, or any
