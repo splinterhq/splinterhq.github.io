@@ -89,7 +89,11 @@ or mTLS is needed). This will likely be the "best bet" for k8s deployments,
 unless someone wants to write a gRPC version.</p>
 <p>There's lots of possibilities, think "micro services" that run as shared
 objects plugged into an L3 data pipeline.</p>
-<p>They have access to Lua, too <code>:)</code></p>
+<p>Think what you could do with something like <a href="https://github.com/bytedance/sonic">Sonic</a>
+in a sidecar serializing your data asynchronously without socket, mutex
+or even <code>memcpy()</code> penalty. You can write shards in Go, Rust, or any
+language that compiles down to standard shared objects.</p>
+<p>Shards have access to Lua, too <code>:)</code></p>
 <p>Stay tuned!</p>
 
     </main>
