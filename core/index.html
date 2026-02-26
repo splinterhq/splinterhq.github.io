@@ -207,7 +207,7 @@ processes can monitor without needing a centralized lock:</p>
 
 <span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
     <span class="hljs-comment">// open pre-existing project bus</span>
-    <span class="hljs-keyword">if</span> (splinter_open(<span class="hljs-string">"/dev/shm/physics_bus"</span>) != <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">if</span> (splinter_open(<span class="hljs-string">"physics_bus"</span>) != <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
 
     <span class="hljs-comment">// use a BIGUINT to track global events across 100+ processes</span>
     <span class="hljs-comment">// this allows L3-speed atomic increments</span>
@@ -273,7 +273,7 @@ indicate that an "Unstable" label was applied anywhere on the bus.</p>
 
 <span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
     <span class="hljs-comment">// bind the bus to NUMA node 1 for local memory controller performance</span>
-    splinter_open_numa(<span class="hljs-string">"/dev/shm/physics_bus"</span>, <span class="hljs-number">1</span>);
+    splinter_open_numa(<span class="hljs-string">"experiment_bus"</span>, <span class="hljs-number">1</span>);
 
     <span class="hljs-comment">// map Bloom bit 7 (Unstable) to Signal Group 0 (Safety)</span>
     splinter_watch_label_register(LABEL_UNSTABLE, GROUP_SAFETY);
