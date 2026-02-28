@@ -223,6 +223,10 @@ footer {
   text-align: center;
 }
 
+footer span {
+  color: var(--terminal-gray);
+}
+
 /* The next comment line is for lume's code plugin */
 
 pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
