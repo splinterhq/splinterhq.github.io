@@ -66,7 +66,7 @@ information is never "sent"; it is published. Readers access the raw memory
 directly, crossing only the minimal checkpoints needed for safe coordination,
 eliminating the energetic tax of serialization and context switching.</li>
 <li><strong>Static Geometry:</strong> By using a fixed-geometry arena, Splinter eliminates the
-"learned negligence" of dynamic heap fragmentation and background garbage
+complications that stem from dynamic heap fragmentation and background garbage
 collection.</li>
 <li><strong>Lock-Free Practicality:</strong> No time is wasted acquiring blocking mutex locks;
 Splinter uses standard portable atomic sequence locks (<code>epoch</code>).</li>
