@@ -124,6 +124,9 @@
                         
                         
                     
+                        
+                        
+                    
 
                     <li class="level0 bold  children">
 
@@ -155,6 +158,26 @@
                                     
                                     
                                     <a href="use-cases">Splinter Use Cases</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="installing">Building &amp; Installing</a>
 
                                     
                                 </li>
@@ -815,6 +838,10 @@
         
         
     
+        
+        
+        
+    
     
 
     
@@ -1024,29 +1051,8 @@ the lack of <code>memfd</code> (forcing anonymous file descriptors to work), but
 <code>WITH_VALGRIND=1</code></li>
 </ul>
 <h2 id="quick-start-%2F-building-%26-installing" tabindex="-1"><a href="#quick-start-%2F-building-%26-installing" class="header-anchor">Quick Start / Building &amp; Installing</a></h2>
-<p>If you want to build Splinter with "everything", just clone the repo, enter
-<code>libsplinter/</code> and just type <strong><code>make</code></strong>. This will configure a build with
-<code>-DWITH_NUMA=ON</code>, <code>-DWITH_LUA=ON</code>, <code>-DWITH_EMBEDDINGS=ON</code>, <code>-DWITH_LLAMA=ON</code>
-(for inference) and <code>-DWITH_RUST=ON</code> for bindings.</p>
-<p>This also means you need to have all of those prerequisites installed and want
-to build with them. If you want to pick and choose yourself, or enable nothing
-at all, then do this:</p>
-<pre><code class="language-bash hljs">git <span class="hljs-built_in">clone</span> git@bitbucket.org:tinkertim/libsplinter.git
-
-<span class="hljs-built_in">cd</span> libsplinter
-<span class="hljs-built_in">mkdir</span> build
-<span class="hljs-built_in">cd</span> build
-
-cmake -D{your flags} ..
-ctest --output-on-failure
-<span class="hljs-built_in">sudo</span> -E make install
-</code></pre>
-<p>The <code>-E</code> option tells Sudo to preserve your environment, which is required if
-you're running install targets with Rust enabled. Once you have installed, you
-can verify with <code>splinterctl --version</code>.</p>
-<p>From there, check out <a href="cli">the CLI</a> and then <a href="core">the C API</a> and
-<a href="bindings">bindings</a>. You can find examples of most functions in
-<code>splinter_test.c</code> if the doxygen-style comments aren't enough.</p>
+<p><strong>See <a href="installing">Building &amp; Intstalling Splinter</a></strong>. Provided you have a working
+compiler (like GCC), Splinter has very few (and all optional) dependencies.</p>
 <h2 id="comparison-with-related-tools" tabindex="-1"><a href="#comparison-with-related-tools" class="header-anchor">Comparison With Related Tools</a></h2>
 <p>It's not entirely fair to compare active databases to Splinter because they are
 competing with their "hands tied" by mutexes and socket layers. Splinter

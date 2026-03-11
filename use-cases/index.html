@@ -38,15 +38,23 @@
 <meta property="og:site_name" content="Splinter Documentation">
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Splinter Use Cases">
+<meta property="og:description" content="A physics-based breakdown of Splinter's performance, analyzing Cycles Per Operation to demonstrate its massive efficiency gains over traditional DBs.">
 <meta property="og:url" content="https://splinterhq.github.io/use-cases/">
 <meta name="twitter:card" content="summary">
+<meta name="description" content="A physics-based breakdown of Splinter's performance, analyzing Cycles Per Operation to demonstrate its massive efficiency gains over traditional DBs.">
+<meta name="keywords" content="Cycles Per Operation, IPC Performance, Lock-Free Benchmarks, Socket Tax, Hardware Optimization">
+<meta name="robots" content="index, follow">
 <meta name="generator" content="Lume 3.2.1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Splinter Documentation">
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Splinter Use Cases">
+<meta property="og:description" content="A physics-based breakdown of Splinter's performance, analyzing Cycles Per Operation to demonstrate its massive efficiency gains over traditional DBs.">
 <meta property="og:url" content="https://splinterhq.github.io/use-cases/">
 <meta name="twitter:card" content="summary">
+<meta name="description" content="A physics-based breakdown of Splinter's performance, analyzing Cycles Per Operation to demonstrate its massive efficiency gains over traditional DBs.">
+<meta name="keywords" content="Cycles Per Operation, IPC Performance, Lock-Free Benchmarks, Socket Tax, Hardware Optimization">
+<meta name="robots" content="index, follow">
 <meta name="generator" content="Lume 3.2.1">
 <link rel="icon" sizes="32x32" href="/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -116,6 +124,9 @@
                         
                         
                     
+                        
+                        
+                    
 
                     <li class="level0 bold  children">
 
@@ -149,6 +160,26 @@
                                     
                                     
                                     <a href=".">Splinter Use Cases</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../installing">Building &amp; Installing</a>
 
                                     
                                 </li>
@@ -809,6 +840,10 @@
         
         
     
+        
+        
+        
+    
     
 
     
@@ -959,7 +994,8 @@
 physics experiments. Splinter tends to get used a lot like "gaffer tape" once
 you know how it works.</p>
 <p>Here are some of the most obvious / common uses:</p>
-<h2 id="llm-runtime-%2F-rag-%2F-training-uses" tabindex="-1"><a href="#llm-runtime-%2F-rag-%2F-training-uses" class="header-anchor">LLM Runtime / RAG / Training Uses</a></h2>
+<ol class="toc"><li><a href="#llm-runtime-%2F-rag-%2F-llm-training-uses">LLM Runtime / RAG / LLM Training Uses</a><ul><li><a href="#1.-a-hallucination-governor-(preventing-narrative-lysis)">1. A Hallucination Governor (Preventing Narrative Lysis)</a></li><li><a href="#2.-true-zero-latency-rag-(retrieval-augmented-generation)">2. True Zero-Latency RAG (Retrieval-Augmented Generation)</a></li><li><a href="#3.-user%2Fconversational-memory">3. User/Conversational Memory</a></li></ul></li><li><a href="#high-resolution-data-recording">High-Resolution Data Recording</a></li><li><a href="#configuration-%26-packaging">Configuration &amp; Packaging</a></li><li><a href="#serverless-semantic-kv">Serverless Semantic KV</a></li></ol>
+<h2 id="llm-runtime-%2F-rag-%2F-llm-training-uses" tabindex="-1"><a href="#llm-runtime-%2F-rag-%2F-llm-training-uses" class="header-anchor">LLM Runtime / RAG / LLM Training Uses</a></h2>
 <p>Large Language Models are brilliant, but they suffer from severe amnesia. The
 current industry solution to this is to bolt on a traditional Vector Database,
 which forces the LLM to pause its thinking, serialize a JSON request, send it
@@ -982,28 +1018,56 @@ the entire memory bus for specific concepts without scanning every individual
 slot.</li>
 </ul>
 <p>So, what can you actually <em>build</em> with those tools?</p>
-<h3 id="1.-the-hallucination-governor-(preventing-narrative-lysis)" tabindex="-1"><a href="#1.-the-hallucination-governor-(preventing-narrative-lysis)" class="header-anchor">1. The Hallucination Governor (Preventing Narrative Lysis)</a></h3>
+<h3 id="1.-a-hallucination-governor-(preventing-narrative-lysis)" tabindex="-1"><a href="#1.-a-hallucination-governor-(preventing-narrative-lysis)" class="header-anchor">1. A Hallucination Governor (Preventing Narrative Lysis)</a></h3>
 <p>Because Splinter operates at L3 cache speeds, it can sit <em>inside</em> the LLM's
-auto-regressive generation loop. Using your Steam Shovel and Sifter, you can
-constantly measure the "Tension" of the text the LLM is generating. If the LLM
-starts speaking highly confidently about a subject where it has zero factual
-grounding in its memory slots, a Splinter watcher detects that "Vacuum State."
-It can physically halt the LLM mid-sentence before a hallucination escapes into
-the user's terminal.</p>
+auto-regressive generation loop. This lets observers use read-only <strong>pointer-level</strong>
+access to watch what's happening in real-time and:</p>
+<ul>
+<li>Prompt the model back into alignment based on token pattern fingerprints (a module for token-level threat detection is in development right now)</li>
+<li>Halt generation</li>
+<li>Escalate conversation distrust</li>
+<li>Trigger costlier string-level inspections</li>
+</ul>
 <p>Logging uncertainty at inference and emitting special <code>&lt;UNC_explanation&gt;</code> tokens
-lets you watch for these events <em>very</em> specifically. Custom information physics
-engines can provide even greater accuracy, such as those that Splinter is being
-used to research.</p>
+lets you watch for these events <em>very</em> specifically. A second inference engine will
+ship end-of-March 2026 with more code to show how this can work.</p>
 <h3 id="2.-true-zero-latency-rag-(retrieval-augmented-generation)" tabindex="-1"><a href="#2.-true-zero-latency-rag-(retrieval-augmented-generation)" class="header-anchor">2. True Zero-Latency RAG (Retrieval-Augmented Generation)</a></h3>
 <p>In traditional RAG, embedding vectors are serialized and dragged across the
 kernel boundary. With Splinter, the inference engine (like <code>llama.cpp</code>) simply
 casts a raw C-pointer to the L3 cache. When a user asks a 70B parameter model a
 question, the context injection happens instantly. You are feeding the AI its
 own memories at the speed of the hardware bus.</p>
-<h3 id="3.-user-space-conversational-memory" tabindex="-1"><a href="#3.-user-space-conversational-memory" class="header-anchor">3. User-space Conversational Memory</a></h3>
-<p>Splinter gives you a cheap semantic key-&gt;value store for personalizations that
-would work blazingly fast persistently, too. If ctags style bloom isn't enough,
-a 1024x1024 store just for their needs works perfectly.</p>
+<h3 id="3.-user%2Fconversational-memory" tabindex="-1"><a href="#3.-user%2Fconversational-memory" class="header-anchor">3. User/Conversational Memory</a></h3>
+<p>Splinter provides auditable memory and is especially good at agentic coordination
+thanks to raw pointer sharing. Many models can work on a single context window along
+with their own independent scratch pads, all in the same store.</p>
+<p>You can also use Splinter to store embeddings-enriched chat transcripts, for easy
+semantic recollection. Combined with bloom tags, it's a powerful base memory
+substrate.</p>
+<h2 id="high-resolution-data-recording" tabindex="-1"><a href="#high-resolution-data-recording" class="header-anchor">High-Resolution Data Recording</a></h2>
+<p>One second of time might represent:</p>
+<ul>
+<li>One second of audio</li>
+<li>One second of video</li>
+<li>One second of 20 sensors, each with three orders (velocity, acceleration, jitter)</li>
+<li>One second of one or more multi-strata tensors</li>
+</ul>
+<p>... simultaneously. Traditional relational databases don't always lend
+well to fidelity in timing. Splinter is designed to capture data as fast
+as possible, with lots of helpers to backfill what can be derived later.</p>
+<p>This lets you capture vectors of motion with the motion as fast as the L3 cache of
+your hardware will let you. It's great for field monitoring of all kinds, and due to
+static geometry, much kinder to flash-based storage.</p>
+<h2 id="configuration-%26-packaging" tabindex="-1"><a href="#configuration-%26-packaging" class="header-anchor">Configuration &amp; Packaging</a></h2>
+<p>Slots are great places to package binaries, documentation, or whatever else you
+need persistently, and then re-use the store for configuration once you unpack.</p>
+<p>You can also just use it for a configuration database, or a place to control
+customer feature flags, etc.</p>
+<h2 id="serverless-semantic-kv" tabindex="-1"><a href="#serverless-semantic-kv" class="header-anchor">Serverless Semantic KV</a></h2>
+<p>Splinter's persistent stores work wonderfully well on DenoKV; use persistent mode
+and bloom with pre-filled embeddings to help serve "psychic" ads at the edge, or
+whatever you need to serve.</p>
+<p>If it allows access to <code>mmap()</code>, Splinter will work on it.</p>
 
         </article>
       </section>
