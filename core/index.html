@@ -1,56 +1,976 @@
 <!DOCTYPE html>
 <html lang="en"><head>
+
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Splinter's Core, Benchmarks &amp; Code Walkthrough - Splinter Vector KV Substrate</title>
-    <meta name="color-scheme" content="dark">
-    <meta name="google-site-verification" content="cFJqGxOZGxw1APr0yrQthB4Ml5vFuMNBu39xMS4BYJI">
-    <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/dark.css" onload="document.documentElement.classList.add('sl-theme-dark');">
-    <link rel="stylesheet" href="/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+
     <link rel="canonical" href="https://splinterhq.github.io/core/">
+
+    <title>Splinter Documentation - Core Library</title>
+ 
+    <!-- Pico CSS -->
+    <link rel="stylesheet" href="../css/pico.min.css" inline="">
+
+    <!-- Font Awesome -->
+    <link href="../css/font-awesome.css" rel="stylesheet">
+
+    <!-- GitHub Dark Hightlight.js Theme -->
+    <link href="../css/github-dark.min.css" rel="stylesheet">
+
+    <!-- Lumocs CSS -->
+    <link href="../css/palette.css" rel="stylesheet" inline="">
+    <link href="../css/general.css" rel="stylesheet" inline="">
+    <link href="../css/sidebar.css" rel="stylesheet" inline="">
+    <link href="../css/blockquotes.css" rel="stylesheet" inline="">
+    
+    <!-- Lumocs JS -->
+    <script src="../js/theme-switcher.js" inline=""></script>
+    <script src="../js/hamburger.js" inline=""></script>
+    <script src="../js/hierarchy.js" inline=""></script>
+
+    <!-- Overridable custom content -->
     <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
-    </script>
+</script>
+
+
   <meta property="og:type" content="website">
-<meta property="og:site_name" content="Splinter Vector KV Substrate">
+<meta property="og:site_name" content="Splinter Documentation">
 <meta property="og:locale" content="en">
-<meta property="og:description" content="Explore the core architecture, C code examples, and performance benchmarks of Splinter, including its application as an LLM semantic hippocampus.">
+<meta property="og:title" content="Core Library">
+<meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta property="og:url" content="https://splinterhq.github.io/core/">
-<meta property="og:image" content="https://splinterhq.github.io/uploads/favicon.svg">
 <meta name="twitter:card" content="summary">
-<meta name="description" content="Explore the core architecture, C code examples, and performance benchmarks of Splinter, including its application as an LLM semantic hippocampus.">
-<meta name="keywords" content="Splinter Core, C Programming, Memory Benchmarks, Lock-Free Architecture, Retrieval-Augmented Generation">
+<meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
 <meta name="robots" content="index, follow">
-<meta name="generator" content="Lume 3.1.1">
+<meta name="generator" content="Lume 3.2.1">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Documentation">
+<meta property="og:locale" content="en">
+<meta property="og:title" content="Core Library">
+<meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta property="og:url" content="https://splinterhq.github.io/core/">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
+<meta name="robots" content="index, follow">
+<meta name="generator" content="Lume 3.2.1">
 <link rel="icon" sizes="32x32" href="/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
 </head>
   <body>
-    <main class="container">
-      <nav class="top-nav" id="nav">
-        <a href="/">INTRO</a>
-        <a href="/core">CORE</a>
-        <a href="/cli">CLI</a>
-        <a href="/shards">SHARDS</a>
-        <a href="/bindings">BINDINGS</a>
-        <a href="https://github.com/splinterhq/libsplinter/tree/main" target="_blank">CODE</a>
-      </nav>
-      <div style="clear: both"></div>
-      <h1>Splinter's Core, Benchmarks &amp; Code Walkthrough</h1>
-<h2>"Core" Means <code>splinter.c</code> and <code>splinter.h</code> only.</h2>
-<p>Philosophically, Splinter is built under the following constraints:</p>
-<ol>
-<li>It is not a database; it is an active storage substrate. Clients do all
-calculating.</li>
-<li>The main hot path of the code should strive to fit in a modern processor's
-instruction cache.</li>
-</ol>
-<p>This set of constraints has kept the core library very lean, currently at
-890 lines of actual code, less if you remove support for embeddings, even less
-if you take out the bitwise operators if you don't need them, etc. It's designed
-to be embedded and customized. Splinter provides a stable, high-speed substrate
-in less code than most line editors occupy.</p>
-<h3>Embedding Splinter</h3>
+  <main>
+    <!-- content -->
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside>
+        <div class="aside-content">
+          
+<header>
+    <ul>
+        <!-- Hamburger Icon -->
+        <li id="hamburger-wrapper">
+        <div id="hamburger-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        </li>
+        
+        <!-- Brand Name -->
+        <li>
+            
+            <a class="navbar-brand" href="..">
+                Splinter Documentation
+            </a>
+        </li>
+
+        <!-- Light/Dark Theme Selector -->
+        <li class="mobile right"><span class="theme-switcher"><i id="theme-icon" class="fas fa-moon"></i></span></li>
+
+        <!-- Aux Top Links -->
+        
+        <li class="mobile right">
+            <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+            <i class="fab fa-github"></i>
+            </a>
+        </li>
+        
+    </ul>
+</header>
+<section class="menu">
+    <nav>
+        
+        
+            <ul>
+                <!-- Page Hierarchy -->
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+
+                    <li class="level0 bold collapsed children">
+
+                        
+                            <div class="right collapser">
+                                <i class="fas fa-chevron-down down"></i>
+                                <i class="fas fa-chevron-up up"></i>
+                            </div>
+                        
+                        
+                        <a href="..">Splinter Overview</a>
+
+                        
+                            <ul>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../use-cases">Splinter Use Cases</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../splinter-performance">Splinter's Performance</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../splinter-and-linux">Splinter/Linux Symbiosis</a>
+
+                                    
+                                </li>
+                            
+                            </ul>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+                        
+                    
+
+                    
+                    
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+
+                    <li class="level0 bold  children">
+
+                        
+                            <div class="right collapser">
+                                <i class="fas fa-chevron-down down"></i>
+                                <i class="fas fa-chevron-up up"></i>
+                            </div>
+                        
+                        
+                        <a href=".">Core Library</a>
+
+                        
+                            <ul>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                
+                                <li class="level1 collapsed children">
+
+                                    
+                                        <div class="right collapser">
+                                            <i class="fas fa-chevron-down down"></i>
+                                            <i class="fas fa-chevron-up up"></i>
+                                        </div>
+                                    
+                                    
+                                    <a href="functions">Function Reference</a>
+
+                                    
+                                        <ul>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-create">splinter_create()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-open">splinter_open()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-create-or-open">splinter_create_or_open()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-open-or-create">splinter_open_or_create()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-open-numa">splinter_open_numa()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-close">splinter_close()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-get-header-snapshot">splinter_get_header_snapshot()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-get-slot-snapshot">splinter_get_slot_snapshot()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-get">splinter_get()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-set">splinter_set()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-unset">splinter_unset()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-list">splinter_list()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-poll">splinter_poll()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-config">splinter_config(*)</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-slot-usr">splinter_slot_usr(*)</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-set-slot-time">splinter_set_slot_time()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-set-named-type">splinter_set_named_type()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-watch-register">splinter_watch_register()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-watch-unregister">splinter_watch_unregister()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-set-label">splinter_set_label()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-watch-label-register">splinter_label_register()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-set-embedding">splinter_set_embedding()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-get-embedding">splinter_get_embedding()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-get-epoch">splinter_get_epoch()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-get-raw-ptr">splinter_get_epoch()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-enumerate-matches">splinter_enumerate_matches()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-client-set-tandem">splinter_client_set_tandem()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-client-unset-tandem">splinter_client_unset_tandem()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-get-signal-count">splinter_get_signal_count()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-integer-op">splinter_integer_op()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="functions/splinter-pulse-watchers">splinter_pulse_watchers()</a>
+                                            </li>
+                                        
+                                        </ul>
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="structures">Structures &amp; Types</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="constants">Constants &amp; Bits</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="examples">Example Workday Uses</a>
+
+                                    
+                                </li>
+                            
+                            </ul>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../cli">Command Line Interfaces</a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+
+                    <li class="level0 bold collapsed children">
+
+                        
+                            <div class="right collapser">
+                                <i class="fas fa-chevron-down down"></i>
+                                <i class="fas fa-chevron-up up"></i>
+                            </div>
+                        
+                        
+                        <a href="../bindings">Language Bindings (FFI)</a>
+
+                        
+                            <ul>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/rust">Rust</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/python">Python 3</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/java">Java</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/typescript">TypeScript</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/lua">Lua</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/shell">Shell</a>
+
+                                    
+                                </li>
+                            
+                            </ul>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../shards">Splinter Logic Shards</a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../tests">Testing Splinter</a>
+
+                        
+                    </li>
+                
+            </ul>
+        
+
+        <!-- Add nav_links -->
+        
+            <ul>
+                
+                    <li>
+                        <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+                            GitHub Repository <i class="fa fa-external-link" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        
+    </nav>
+    <!-- Sidebar custom content -->
+</section>
+        </div>
+      </aside>
+      <section>
+        <header>
+            
+  <ul>
+    
+    <!--<div id="search"></div>-->
+    
+    <li>
+      
+
+
+
+<!-- Find the Current Page in Hierarchy -->
+
+    
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    
+
+    
+    
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    
+
+    
+    
+    
+
+    
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+
+<!-- Display the Breadcrumbs -->
+
+
+    </li>
+    
+    <!-- Light/Dark Theme Selector -->
+    <li class="right"><span class="theme-switcher"><i id="theme-icon" class="fas fa-moon"></i></span></li>
+
+    <!-- Aux Top Links -->
+    
+      <li class="right">
+        <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+    
+    
+  </ul>      
+        </header>
+        <article>
+          <h1>Splinter's Core &amp; Benchmarks</h1>
+<p>Splinter strongly separates storage and calculation concerns by design. Thus,
+"core" in splinter is a relative term that always refers to <code>splinter.c</code> and
+<code>splinter.h</code>; relative to how much of the included code is left.</p>
+<p>A system that's "20% Core" has roughly 20% of the original code left in it after
+removal of unused functions.</p>
+<h2 id="core-excludes-all-tooling-%26-tests." tabindex="-1"><a href="#core-excludes-all-tooling-%26-tests." class="header-anchor">Core Excludes All Tooling &amp; Tests.</a></h2>
+<p>In <em>core</em>, we care about the size of the code that establishes and maintains the
+store, not the code that consumes it. This means referring to core automatically
+excludes the CLI, etc.</p>
+<h2 id="embedding-splinter's-core" tabindex="-1"><a href="#embedding-splinter's-core" class="header-anchor">Embedding Splinter's Core</a></h2>
 <p>You have the option to link against <code>libsplinter.a</code> or <code>libsplinter_p.a</code> if you
 have them in your linker path. You also have the option of just adding
 <code>splinter.c</code> as a dependency and including its header file, <code>splinter.h</code>, like
@@ -62,7 +982,7 @@ cached by the CPU.</p>
 <p>Leave the originals as-is, so you can still build and use the CLI to manage the
 stores. Additionally, <strong>double check alignment at 64 bytes</strong> (there's a test for
 that) if you do anything to the slot structures.</p>
-<h2>Benchmarks</h2>
+<h2 id="real-world-commodity-hardware-benchmarks" tabindex="-1"><a href="#real-world-commodity-hardware-benchmarks" class="header-anchor">Real-World Commodity Hardware Benchmarks</a></h2>
 <p>All tests were conducted on a Tiger Lake (i3-1115G4) with 6GB total usable RAM
 while performing other experiments (worst case workday):</p>
 <table>
@@ -181,7 +1101,7 @@ while performing other experiments (worst case workday):</p>
 </table>
 <p>Keys were limited in file tests due to space and wear constraints, but an
 in-memory reference is provided.</p>
-<h2>A Note On Keyspaces</h2>
+<h2 id="a-note-on-keyspaces" tabindex="-1"><a href="#a-note-on-keyspaces" class="header-anchor">A Note On Keyspaces</a></h2>
 <p>The <code>key</code> part of <code>key -&gt; value</code> really is the key to success in your schema (no
 puns intended, honestly).</p>
 <p>The most basic use of a key is something like <code>foo</code>. And if you used tandem
@@ -197,177 +1117,18 @@ won't appear in your normal data, like 💩; the separator is stored as
 <code>SPL_ORDER_SEPARATOR</code> in <code>splinter.h</code>.</p>
 <p>A little levity can make drab analysis marathons more tolerable. Send in the
 poop, the clowns, the beds, or whatever it takes in the name of discovery.</p>
-<h2>Some C Examples of Splinter During an "Average Work Day":</h2>
-<p><strong>Note - code is provided "as-is" for illustrative use; it may require polishing and
-further implementation to compile.</strong></p>
-<h3>1. The Ingestor: Telemetry &amp; Atomic Global State</h3>
-<p>This program simulates a high-frequency data loop. It records raw sensor values
-while using splinter_integer_op to maintain a global "Event Count" that other
-processes can monitor without needing a centralized lock:</p>
-<pre><code class="language-c hljs"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"splinter.h"</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
 
-<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
-    <span class="hljs-comment">// open pre-existing project bus</span>
-    <span class="hljs-keyword">if</span> (splinter_open(<span class="hljs-string">"physics_bus"</span>) != <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
-
-    <span class="hljs-comment">// use a BIGUINT to track global events across 100+ processes</span>
-    <span class="hljs-comment">// this allows L3-speed atomic increments</span>
-    <span class="hljs-type">uint64_t</span> inc = <span class="hljs-number">1</span>;
-    <span class="hljs-type">double</span> sensor_val = <span class="hljs-number">0.0</span>;
-    <span class="hljs-type">char</span> key[SPLINTER_KEY_MAX];
-
-    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++) {
-        sensor_val = read_spectrometer(); <span class="hljs-comment">// hypothetical hardware call</span>
-        <span class="hljs-built_in">snprintf</span>(key, <span class="hljs-keyword">sizeof</span>(key), <span class="hljs-string">"sensor.alpha.%d"</span>, i % <span class="hljs-number">100</span>);
-
-        <span class="hljs-comment">// write the telemetry point</span>
-        splinter_set(key, &amp;sensor_val, <span class="hljs-keyword">sizeof</span>(sensor_val));
-
-        <span class="hljs-comment">// atomic increment of the shared global counter</span>
-        <span class="hljs-comment">// no mutex required; Splinter handles the atomic transition.</span>
-        splinter_integer_op(<span class="hljs-string">"global_event_count"</span>, SPL_OP_INC, &amp;inc);
-    }
-
-    splinter_close();
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h3>2. The Analyzer: Vector State &amp; Bloom Signaling</h3>
-<p>In this scenario, we process the telemetry and generate a state vector
-(embedding). We use Bloom Labels to categorize particles. If a particle is
-"Unstable," we tag it, which automatically pulses a specific Signal Group to
-wake up a safety-shutdown process:</p>
-<pre><code class="language-c hljs"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"splinter.h"</span></span>
-
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> LABEL_UNSTABLE (1ULL &lt;&lt; 7) <span class="hljs-comment">// We use bit 7 for instability tracking</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> GROUP_SAFETY    0          <span class="hljs-comment">// Signal group for the emergency process</span></span>
-
-<span class="hljs-type">void</span> <span class="hljs-title function_">analyze_particle_state</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *id)</span> {
-    <span class="hljs-type">float</span> state_vector[SPL_EMBED_DIM];
-    compute_particle_physics(id, state_vector); <span class="hljs-comment">// Hypothetical math</span>
-
-    <span class="hljs-comment">// update the high-dimensional vector in shared memory</span>
-    <span class="hljs-comment">// uses sequence locks to ensure readers don't get 'torn' vectors.</span>
-    splinter_set_embedding(id, state_vector);
-
-    <span class="hljs-comment">// some kind of anomaly detection (simulated)</span>
-    <span class="hljs-keyword">if</span> (state_vector[<span class="hljs-number">0</span>] &gt; <span class="hljs-number">0.95f</span>) { 
-        <span class="hljs-comment">// atomically-apply a Bloom label</span>
-        <span class="hljs-comment">// this also triggers a pulse to the signal arena for anyone watching bit 7</span>
-        splinter_set_label(id, LABEL_UNSTABLE);
-        <span class="hljs-comment">// elusive splinter particle "sparticle" :P</span>
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Sparticle %s is drifting! Label applied.\n"</span>, id);
-    }
-}
-</code></pre>
-<p>The speed isn't theoretical, though <a href="/splinter_performance">here's the math</a>
-that explains it. FFI isn't scary when you just use C, and loadable modules are
-the very next major feature on the way. Until then, the CLI is very hackable.</p>
-<p>See also <code>splinference.cpp</code> as well as <code>splinter_stress.c</code> for examples of
-batching and a multi-threaded mosh pit that never corrupts.</p>
-<h3>3. The Monitor: NUMA-Local Watching</h3>
-<p>This program represents the "Safety Observer." It runs on a specific NUMA node
-to minimize memory latency. It doesn't poll; it waits for the Signal Arena to
-indicate that an "Unstable" label was applied anywhere on the bus.</p>
-<pre><code class="language-c hljs"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">"splinter.h"</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
-
-<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> {
-    <span class="hljs-comment">// bind the bus to NUMA node 1 for local memory controller performance</span>
-    splinter_open_numa(<span class="hljs-string">"experiment_bus"</span>, <span class="hljs-number">1</span>);
-
-    <span class="hljs-comment">// map Bloom bit 7 (Unstable) to Signal Group 0 (Safety)</span>
-    splinter_watch_label_register(LABEL_UNSTABLE, GROUP_SAFETY);
-
-    <span class="hljs-type">uint64_t</span> last_count = splinter_get_signal_count(GROUP_SAFETY);
-
-    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) {
-        <span class="hljs-type">uint64_t</span> current = splinter_get_signal_count(GROUP_SAFETY);
-        
-        <span class="hljs-keyword">if</span> (current &gt; last_count) {
-            <span class="hljs-comment">// a writer somewhere just set the UNSTABLE bit on a key</span>
-            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"SAFETY ALERT: %lu new unstable detections!\n"</span>, current - last_count);
-            
-            <span class="hljs-comment">// snapshot the header to check parse_failures or global epoch</span>
-            <span class="hljs-type">splinter_header_snapshot_t</span> snap;
-            splinter_get_header_snapshot(&amp;snap);
-            
-            last_count = current;
-        }
-        
-        <span class="hljs-comment">// in the real world we would use epoll() on an eventfd</span>
-        <span class="hljs-comment">// linked to the signal group. </span>
-        usleep(<span class="hljs-number">500</span>); 
-    }
-
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}
-</code></pre>
-<h2>LLM Runtime / RAG / Training Uses</h2>
-<p>Large Language Models are brilliant, but they suffer from severe amnesia. The
-current industry solution to this is to bolt on a traditional Vector Database,
-which forces the LLM to pause its thinking, serialize a JSON request, send it
-over a network socket, and wait for a database to reply.</p>
-<p>Splinter allows you to build a <strong>Semantic Hippocampus</strong>: a shared memory space
-where the LLM’s short-term context and long-term memories live in the exact same
-physical RAM, accessible instantly without a single <code>memcpy()</code>.</p>
-<p>To understand how to use it, you don't need a PhD in linear algebra. You just
-need to know your toolkit:</p>
-<ul>
-<li><strong>Cosine Similarity is your Steam Shovel:</strong> It grabs massive, general scoops
-of memory that are semantically pointing in the same direction.</li>
-<li><strong>Euclidean Distance is your Sifter:</strong> It shakes out the exact literal matches
-from that massive bucket of context.</li>
-<li><strong>Feature Flags are your Post-It Notes:</strong> You can slap a 64-bit integer onto
-any memory slot to instantly track metadata (e.g.,
-<code>flag_user_frustrated = 1</code>).</li>
-<li><strong>Bloom Filters are your C-Style Tags:</strong> They allow you to instantly filter
-the entire memory bus for specific concepts without scanning every individual
-slot.</li>
-</ul>
-<p>So, what can you actually <em>build</em> with those tools?</p>
-<h3>1. The Hallucination Governor (Preventing Narrative Lysis)</h3>
-<p>Because Splinter operates at L3 cache speeds, it can sit <em>inside</em> the LLM's
-auto-regressive generation loop. Using your Steam Shovel and Sifter, you can
-constantly measure the "Tension" of the text the LLM is generating. If the LLM
-starts speaking highly confidently about a subject where it has zero factual
-grounding in its memory slots, a Splinter watcher detects that "Vacuum State."
-It can physically halt the LLM mid-sentence before a hallucination escapes into
-the user's terminal.</p>
-<p>Logging uncertainty at inference and emitting special <code>&lt;UNC_explanation&gt;</code> tokens
-lets you watch for these events <em>very</em> specifically. Custom information physics
-engines can provide even greater accuracy, such as those that Splinter is being
-used to research.</p>
-<h3>2. True Zero-Latency RAG (Retrieval-Augmented Generation)</h3>
-<p>In traditional RAG, embedding vectors are serialized and dragged across the
-kernel boundary. With Splinter, the inference engine (like <code>llama.cpp</code>) simply
-casts a raw C-pointer to the L3 cache. When a user asks a 70B parameter model a
-question, the context injection happens instantly. You are feeding the AI its
-own memories at the speed of the hardware bus.</p>
-<h3>3. User-space Conversational Memory</h3>
-<p>Splinter gives you a cheap semantic key-&gt;value store for personalizations
-that would work blazingly fast persistently, too. If ctags style bloom isn't
-enough, a 1024x1024 store just for their needs works perfectly.</p>
-<h2>Testing Splinter</h2>
-<p>You can run Splinter's tests using <code>make tests</code>. If you have enabled Valgrind
-integration, splinter's unit and integration tests will also be scrutinized
-for leaks and access errors. For less than 1k lines of total core code,
-Splinter is extremely well-tested. Splinter uses CMake's test runner with
-a few scripts at the end.</p>
-<p>Performance benchmarks can be obtained with <code>splinter_stress</code> and
-<code>splinterp_stress</code> for in-memory and file-backed respectively, as shown above.</p>
-
-    </main>
-    <footer>
-    Want To Help Fund Development?<br>
-    <div style="text-align: center; margin: 1em auto">
-      <a href="https://www.buymeacoffee.com/timthepost" id="donateLink" target="_blank">
-        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" title="I run on coffee!" style="height: 60px !important; width: 217px !important">
-      </a>
+        </article>
+      </section>
     </div>
-    <span>Terminal ❤️ Nostalgia</span><br>
-    </footer>
-  
+  </main>
+  <footer class="container-fluid">
+    <div class="container">
+      <div class="grid">
+    <!-- Custom footer content -->
+    <span class="right notice">Powered by <a href="https://lumocs.56k.guru">Lumocs</a>, a documentation theme for <a href="https://lume.land">Lume</a>.</span>
+</div>
+    </div>
+  </footer>
 
 </body></html>

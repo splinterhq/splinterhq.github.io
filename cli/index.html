@@ -1,207 +1,1110 @@
 <!DOCTYPE html>
 <html lang="en"><head>
+
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>Splinter's CLI and 'splinterctl' Utilities - Splinter Vector KV Substrate</title>
-    <meta name="color-scheme" content="dark">
-    <meta name="google-site-verification" content="cFJqGxOZGxw1APr0yrQthB4Ml5vFuMNBu39xMS4BYJI">
-    <link rel="stylesheet" media="(prefers-color-scheme:dark)" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/themes/dark.css" onload="document.documentElement.classList.add('sl-theme-dark');">
-    <link rel="stylesheet" href="/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+
     <link rel="canonical" href="https://splinterhq.github.io/cli/">
+
+    <title>Splinter Documentation - Command Line Interfaces</title>
+ 
+    <!-- Pico CSS -->
+    <link rel="stylesheet" href="../css/pico.min.css" inline="">
+
+    <!-- Font Awesome -->
+    <link href="../css/font-awesome.css" rel="stylesheet">
+
+    <!-- GitHub Dark Hightlight.js Theme -->
+    <link href="../css/github-dark.min.css" rel="stylesheet">
+
+    <!-- Lumocs CSS -->
+    <link href="../css/palette.css" rel="stylesheet" inline="">
+    <link href="../css/general.css" rel="stylesheet" inline="">
+    <link href="../css/sidebar.css" rel="stylesheet" inline="">
+    <link href="../css/blockquotes.css" rel="stylesheet" inline="">
+    
+    <!-- Lumocs JS -->
+    <script src="../js/theme-switcher.js" inline=""></script>
+    <script src="../js/hamburger.js" inline=""></script>
+    <script src="../js/hierarchy.js" inline=""></script>
+
+    <!-- Overridable custom content -->
     <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
-    </script>
+</script>
+
+
   <meta property="og:type" content="website">
-<meta property="og:site_name" content="Splinter Vector KV Substrate">
+<meta property="og:site_name" content="Splinter Documentation">
 <meta property="og:locale" content="en">
-<meta property="og:description" content="Discover Splinter's extensible command-line interface and splinterctl utilities for managing shared-memory stores, running Lua scripts, and more.">
+<meta property="og:title" content="Command Line Interfaces">
+<meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta property="og:url" content="https://splinterhq.github.io/cli/">
-<meta property="og:image" content="https://splinterhq.github.io/uploads/favicon.svg">
 <meta name="twitter:card" content="summary">
-<meta name="description" content="Discover Splinter's extensible command-line interface and splinterctl utilities for managing shared-memory stores, running Lua scripts, and more.">
-<meta name="keywords" content="splinterctl, Command Line Interface, Store Management, Lua Scripting, REPL">
+<meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
 <meta name="robots" content="index, follow">
-<meta name="generator" content="Lume 3.1.1">
+<meta name="generator" content="Lume 3.2.1">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Documentation">
+<meta property="og:locale" content="en">
+<meta property="og:title" content="Command Line Interfaces">
+<meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta property="og:url" content="https://splinterhq.github.io/cli/">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
+<meta name="robots" content="index, follow">
+<meta name="generator" content="Lume 3.2.1">
 <link rel="icon" sizes="32x32" href="/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
 </head>
   <body>
-    <main class="container">
-      <nav class="top-nav" id="nav">
-        <a href="/">INTRO</a>
-        <a href="/core">CORE</a>
-        <a href="/cli">CLI</a>
-        <a href="/shards">SHARDS</a>
-        <a href="/bindings">BINDINGS</a>
-        <a href="https://github.com/splinterhq/libsplinter/tree/main" target="_blank">CODE</a>
-      </nav>
-      <div style="clear: both"></div>
-      <h1>Splinter's CLI and 'splinterctl' Utilities</h1>
-<h2>"CLI" Means <code>splinter_cli</code> and <code>splinterctl</code>.</h2>
-<p>Splinter comes with an extensible production-grade CLI tool that lets you manage
-and interact with stores by hand or through the use of simple shell scripts.
-Splinter's CLI has robust features like:</p>
+  <main>
+    <!-- content -->
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside>
+        <div class="aside-content">
+          
+<header>
+    <ul>
+        <!-- Hamburger Icon -->
+        <li id="hamburger-wrapper">
+        <div id="hamburger-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        </li>
+        
+        <!-- Brand Name -->
+        <li>
+            
+            <a class="navbar-brand" href="..">
+                Splinter Documentation
+            </a>
+        </li>
+
+        <!-- Light/Dark Theme Selector -->
+        <li class="mobile right"><span class="theme-switcher"><i id="theme-icon" class="fas fa-moon"></i></span></li>
+
+        <!-- Aux Top Links -->
+        
+        <li class="mobile right">
+            <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+            <i class="fab fa-github"></i>
+            </a>
+        </li>
+        
+    </ul>
+</header>
+<section class="menu">
+    <nav>
+        
+        
+            <ul>
+                <!-- Page Hierarchy -->
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+
+                    <li class="level0 bold collapsed children">
+
+                        
+                            <div class="right collapser">
+                                <i class="fas fa-chevron-down down"></i>
+                                <i class="fas fa-chevron-up up"></i>
+                            </div>
+                        
+                        
+                        <a href="..">Splinter Overview</a>
+
+                        
+                            <ul>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../use-cases">Splinter Use Cases</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../splinter-performance">Splinter's Performance</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../splinter-and-linux">Splinter/Linux Symbiosis</a>
+
+                                    
+                                </li>
+                            
+                            </ul>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+
+                    <li class="level0 bold collapsed children">
+
+                        
+                            <div class="right collapser">
+                                <i class="fas fa-chevron-down down"></i>
+                                <i class="fas fa-chevron-up up"></i>
+                            </div>
+                        
+                        
+                        <a href="../core">Core Library</a>
+
+                        
+                            <ul>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                    
+                                    
+                                
+                                
+                                <li class="level1 collapsed children">
+
+                                    
+                                        <div class="right collapser">
+                                            <i class="fas fa-chevron-down down"></i>
+                                            <i class="fas fa-chevron-up up"></i>
+                                        </div>
+                                    
+                                    
+                                    <a href="../core/functions">Function Reference</a>
+
+                                    
+                                        <ul>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-create">splinter_create()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-open">splinter_open()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-create-or-open">splinter_create_or_open()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-open-or-create">splinter_open_or_create()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-open-numa">splinter_open_numa()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-close">splinter_close()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-get-header-snapshot">splinter_get_header_snapshot()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-get-slot-snapshot">splinter_get_slot_snapshot()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-get">splinter_get()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-set">splinter_set()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-unset">splinter_unset()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-list">splinter_list()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-poll">splinter_poll()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-config">splinter_config(*)</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-slot-usr">splinter_slot_usr(*)</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-set-slot-time">splinter_set_slot_time()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-set-named-type">splinter_set_named_type()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-watch-register">splinter_watch_register()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-watch-unregister">splinter_watch_unregister()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-set-label">splinter_set_label()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-watch-label-register">splinter_label_register()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-set-embedding">splinter_set_embedding()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-get-embedding">splinter_get_embedding()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-get-epoch">splinter_get_epoch()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-get-raw-ptr">splinter_get_epoch()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-enumerate-matches">splinter_enumerate_matches()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-client-set-tandem">splinter_client_set_tandem()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-client-unset-tandem">splinter_client_unset_tandem()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-get-signal-count">splinter_get_signal_count()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-integer-op">splinter_integer_op()</a>
+                                            </li>
+                                        
+                                            <li class="level2">
+                                                <a href="../core/functions/splinter-pulse-watchers">splinter_pulse_watchers()</a>
+                                            </li>
+                                        
+                                        </ul>
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../core/structures">Structures &amp; Types</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../core/constants">Constants &amp; Bits</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../core/examples">Example Workday Uses</a>
+
+                                    
+                                </li>
+                            
+                            </ul>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+                        
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold  ">
+
+                        
+                        
+                        <a href=".">Command Line Interfaces</a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+
+                    <li class="level0 bold collapsed children">
+
+                        
+                            <div class="right collapser">
+                                <i class="fas fa-chevron-down down"></i>
+                                <i class="fas fa-chevron-up up"></i>
+                            </div>
+                        
+                        
+                        <a href="../bindings">Language Bindings (FFI)</a>
+
+                        
+                            <ul>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/rust">Rust</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/python">Python 3</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/java">Java</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/typescript">TypeScript</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/lua">Lua</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../bindings/shell">Shell</a>
+
+                                    
+                                </li>
+                            
+                            </ul>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../shards">Splinter Logic Shards</a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../tests">Testing Splinter</a>
+
+                        
+                    </li>
+                
+            </ul>
+        
+
+        <!-- Add nav_links -->
+        
+            <ul>
+                
+                    <li>
+                        <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+                            GitHub Repository <i class="fa fa-external-link" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        
+    </nav>
+    <!-- Sidebar custom content -->
+</section>
+        </div>
+      </aside>
+      <section>
+        <header>
+            
+  <ul>
+    
+    <!--<div id="search"></div>-->
+    
+    <li>
+      
+
+
+
+<!-- Find the Current Page in Hierarchy -->
+
+    
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    
+
+    
+    
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    
+
+    
+    
+    
+
+    
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+
+<!-- Display the Breadcrumbs -->
+
+
+    </li>
+    
+    <!-- Light/Dark Theme Selector -->
+    <li class="right"><span class="theme-switcher"><i id="theme-icon" class="fas fa-moon"></i></span></li>
+
+    <!-- Aux Top Links -->
+    
+      <li class="right">
+        <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+    
+    
+  </ul>      
+        </header>
+        <article>
+          <h1>Splinter's <code>splinter_cli</code> and <code>splinterctl</code> Programs</h1>
+<blockquote>
+<p class="note">A persistent version of these programs exists as "splinterp_cli"
+and "splinterpctl", respectively.</p>
+</blockquote>
+<p>The <code>splinter_cli</code> program is a REPL-like environment in which you
+can explore and control Splinter stores. You can do things like list,
+set and update keys, run Lua scripts, manage bloom labels, couple tandem
+keys, and other common tasks.</p>
+<p>It features built-in tab completion and hinting, online help for all
+commands and consistency in behavior wherever possible. It serves not
+just as a way to implement functionality, but also to illustrate how
+the library can be used to build "just enough" storage for any project
+that uses KV and vectors over the same physical network.</p>
+<h2 id="command-help-vs-tool-help" tabindex="-1"><a href="#command-help-vs-tool-help" class="header-anchor">Command Help Vs Tool Help</a></h2>
+<p>There are commands <code>splinter_cli</code> understands how to run, which are:</p>
+<pre><code class="language-sh hljs language-bash"> Module     | Description                                                 
+-----------------------------------------------------------------
+ clear      | Clears the screen.                                          
+ cls        | Alias of <span class="hljs-string">'clear'</span>                                            
+ config     | Access Splinter bus and slot metadata.                      
+ get        | Retrieve the value of a key <span class="hljs-keyword">in</span> the store.                   
+ <span class="hljs-built_in">head</span>       | Retrieve just the metadata of a key <span class="hljs-keyword">in</span> the store.           
+ <span class="hljs-built_in">help</span>       | Help with commands and features.                            
+ hist       | View and clear <span class="hljs-built_in">command</span> <span class="hljs-built_in">history</span>.                             
+ list       | List keys <span class="hljs-keyword">in</span> the current store.                             
+ <span class="hljs-built_in">set</span>        | Set a key <span class="hljs-keyword">in</span> the store to a specified value.                
+ <span class="hljs-built_in">unset</span>      | Unset a key <span class="hljs-keyword">in</span> the store (deletes the key).                 
+ use        | Opens a Splinter store by name or path.                     
+ watch      | Observes a key <span class="hljs-keyword">for</span> changes and prints updated contents.     
+ init       | Initialize Splinter stores.                                 
+ <span class="hljs-built_in">export</span>     | Export Splinter data <span class="hljs-keyword">in</span> various formats.                    
+ <span class="hljs-built_in">type</span>       | Display or <span class="hljs-built_in">set</span> the named slot <span class="hljs-built_in">type</span> <span class="hljs-keyword">for</span> a key.               
+ math       | Perform incr/decr and bitwise ops on named biguint keys.    
+ label      | Label a key with bits <span class="hljs-keyword">for</span> its bloom filter                  
+ lua        | Run a lua script                                            
+ orders     | Manage standard vector orders of a key
+</code></pre>
+<p>There's also a way in which <code>splinterctl</code> / <code>splinter_cli</code> should <em>be</em>
+run, which you can get by passing <code>--help</code> to either:</p>
+<pre><code class="language-sh hljs language-bash">Usage:  splinterctl [options] [arguments] *or*
+        splinterctl --no-repl &lt;built <span class="hljs-keyword">in</span> <span class="hljs-built_in">command</span>&gt; [arguments] *or*
+        splinterctl {no args <span class="hljs-keyword">for</span> REPL}
+splinterctl provides a <span class="hljs-built_in">command</span> line interface <span class="hljs-keyword">for</span> Splinter bus interaction.
+Where [options] are:
+  --<span class="hljs-built_in">help</span> / -h                  Show this <span class="hljs-built_in">help</span> display.
+  --history-file / -H &lt;path&gt;   Set the CLI <span class="hljs-built_in">history</span> file to &lt;path&gt;
+  --history-len / -l  &lt;len&gt;    Set the CLI <span class="hljs-built_in">history</span> length to &lt;len&gt;
+  --list-modules / -L          List available commands.
+  --no-repl / -n               Don<span class="hljs-string">'t enter interactive mode.
+  --prefix / -p &lt;prefix&gt;       Prepend &lt;prefix&gt; to read/write ops (namespace)
+  --use / -u &lt;store&gt;           Connect to &lt;store&gt; after starting.
+  --version / -v               Print splinter version information and exit.
+
+splinterctl will look for SPLINTER_HISTORY_FILE and SPLINTER_HISTORY_LEN in the
+environment and use them. However, argument values will always take precedence.
+
+If invoked as "splinterctl", splinterctl automatically turns on --no-repl.
+
+Prefixes (via --prefix) can contain any printing character but '</span>=<span class="hljs-string">'. This uses
+the SPLINTER_NS_PREFIX environmental variable.
+</span></code></pre>
+<h2 id="environmental-variables" tabindex="-1"><a href="#environmental-variables" class="header-anchor">Environmental Variables</a></h2>
+<p>Both tools look for the following environmental variables:</p>
 <ul>
-<li>Command auto completion</li>
-<li>Built-in help</li>
-<li>Easy regex filtering</li>
-<li>Export options</li>
-<li>Access to almost all code possibilities</li>
-<li>Run Lua</li>
-<li>REPL or One-shot.</li>
+<li><code>SPLINTER_NS_PREFIX</code> - prepended to every I/O operation (allows auto namespacing)</li>
+<li><code>SPLINTER_HISTORY_FILE</code> - Default is <code>~/.splinter_history</code></li>
+<li><code>SPLINTER_DEFAULT_STORE</code> - CLI will load this store if set and valid</li>
+<li><code>HOME</code> - Home directory (system setting)</li>
+<li><code>TERM</code> - Terminal Slug (e.g. <code>xterm-256color</code> - system setting)</li>
 </ul>
-<h2><code>splinterctl</code> vs <code>splinter_cli</code></h2>
-<p>The <code>splinter_cli</code> program slightly (and safely, with bounds checking) alters
-its behavior if invoked as <code>splinterctl</code> so that interactive-mode (the REPL) is
-not entered. This allows you to run any command you could in <code>splinter_cli</code>
-manually with <code>splinterctl</code> through a script.</p>
-<h2>Command Modules</h2>
-<p>The following modules (commands) are available in interactive as well as
-non-interactive mode. To see them, run <code>splinterctl --list</code></p>
-<table>
-<thead>
-<tr>
-<th>Module</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>clear</td>
-<td>Clears the screen</td>
-</tr>
-<tr>
-<td>cls</td>
-<td>Alias of 'clear'</td>
-</tr>
-<tr>
-<td>config</td>
-<td>Access Splinter bus and slot metadata</td>
-</tr>
-<tr>
-<td>get</td>
-<td>Retrieve the value of a key in the store</td>
-</tr>
-<tr>
-<td>head</td>
-<td>Retrieve just the metadata of a key in the store</td>
-</tr>
-<tr>
-<td>help</td>
-<td>Help with commands and features</td>
-</tr>
-<tr>
-<td>hist</td>
-<td>View and clear command history</td>
-</tr>
-<tr>
-<td>list</td>
-<td>List keys in the current store</td>
-</tr>
-<tr>
-<td>set</td>
-<td>Set a key in the store to a specified value</td>
-</tr>
-<tr>
-<td>unset</td>
-<td>Unset a key in the store (deletes the key)</td>
-</tr>
-<tr>
-<td>use</td>
-<td>Opens a Splinter store by name or path</td>
-</tr>
-<tr>
-<td>watch</td>
-<td>Observes a key for changes and prints updated contents</td>
-</tr>
-<tr>
-<td>init</td>
-<td>Initialize Splinter stores</td>
-</tr>
-<tr>
-<td>export</td>
-<td>Export Splinter data in various formats</td>
-</tr>
-<tr>
-<td>type</td>
-<td>Display or set the named slot type for a key</td>
-</tr>
-<tr>
-<td>math</td>
-<td>Perform incr/decr and bitwise ops on named biguint keys</td>
-</tr>
-<tr>
-<td>label</td>
-<td>Label a key with bits for its bloom filter</td>
-</tr>
-<tr>
-<td>lua</td>
-<td>Run a lua script</td>
-</tr>
-<tr>
-<td>orders</td>
-<td>Manage standard vector orders of a key</td>
-</tr>
-</tbody>
-</table>
-<h2>Custom Loadable Modules</h2>
-<p><a href="/shards">Shards</a> are planned to launch in the very near future. Some accounting
-and intent advertisement details are still being investigated, and then code
-should hit once we have a working system.</p>
-<p>They'll let you isolate logic into on-demand loadable components with sub-ms
-initialization; similar to Linux kernel modules (in fact, <code>insmod</code> and <code>rmmod</code>
-are the management tools in the working prototype).</p>
-<h2>Command Line Use</h2>
-<p>Take a look at the output of <code>splinterctl --help</code> to see the available options
-you can set for automation.</p>
-<p>Here is how you can use shell to create a new store, then automatically use it
-every time you run <code>splinterctl</code>:</p>
-<pre><code class="language-bash hljs">% splinterctl --init test_store
-Initializing store: test_store
+<h2 id="files" tabindex="-1"><a href="#files" class="header-anchor">Files</a></h2>
+<p><code>${HOME}/.splinterrc</code> is an (optional) list of ctags-style labels before
+hex or binary codes that they represent. For instance:</p>
+<pre><code class="language-sh hljs language-bash">urgent-label 0x1
+debug-label 0x4
+</code></pre>
+<p>63 labels can be used (64 are possible, but the 64th is reserved
+for proximity)</p>
+<h2 id="splinterctl-special-invocation" tabindex="-1"><a href="#splinterctl-special-invocation" class="header-anchor"><code>splinterctl</code> Special Invocation</a></h2>
+<p><code>splinterctl</code> is a symbolic link to <code>splinter_cli</code> that causes the CLI
+to skip REPL setup and some other terminal handling so that you can
+specify commands right on the command line.</p>
+<h3 id="example---splinter_cli-vs-splinterctl%3A" tabindex="-1"><a href="#example---splinter_cli-vs-splinterctl%3A" class="header-anchor">Example - <code>splinter_cli</code> vs <code>splinterctl</code>:</a></h3>
+<p>This is an example of doing the same thing in the interactive REPL-like
+console (<code>splinter_cli</code>) vs just using <code>splinterctl</code> for one-off commands.</p>
+<pre><code class="language-sh hljs language-bash">splinter_cli
+splinter_cli version 1.1.6 build 857b1f1
+To quit, press ctrl-c or ctrl-d.
+no-conn <span class="hljs-comment"># init testing_store</span>
+Initializing store: testing_store
   - Slots: 1024 (4096 bytes each, 64 byte alignment)
   - Value Arena: 4194304 bytes, SRS: 7475328 bytes (~7.13 MB)
-
-% <span class="hljs-built_in">alias</span> splinterctl=<span class="hljs-string">"splinterctl --use test_store"</span>
-
-% splinterctl list
+no-conn <span class="hljs-comment"># use testing_store</span>
+use: now connected to testing_store
+testing_store <span class="hljs-comment"># list</span>
 Key Name                          | Epoch      | Val Len    | Named Type     
 -------------------------------------------------------------------------------------
 
-% splinterctl <span class="hljs-built_in">set</span> foo_key <span class="hljs-string">"A perfectly good value for foo."</span>
-% splinterctl get foo_key
-31:A perfectly good value <span class="hljs-keyword">for</span> foo.
+testing_store <span class="hljs-comment"># set test_key "This is a test value."</span>
+testing_store <span class="hljs-comment"># get test_key</span>
+21:This is a <span class="hljs-built_in">test</span> value.
 
-% splinterctl list
+testing_store <span class="hljs-comment"># </span>
+</code></pre>
+<p>And using <code>splinterctl</code> with just <code>zsh</code>. Note, here we make use of
+the shell's <code>alias</code> functionality so that we don't have to keep
+adding <code>--use testing_store</code> each time:</p>
+<pre><code class="language-sh hljs language-bash">╭─tinkertim at localhost <span class="hljs-keyword">in</span> ~/code 26-03-11 - 12:41:52
+╰─○ splinterctl init testing_store
+Initializing store: testing_store
+  - Slots: 1024 (4096 bytes each, 64 byte alignment)
+  - Value Arena: 4194304 bytes, SRS: 7475328 bytes (~7.13 MB)
+╭─tinkertim at localhost <span class="hljs-keyword">in</span> ~/code 26-03-11 - 12:42:03
+╰─○ <span class="hljs-built_in">alias</span> splinterctl=<span class="hljs-string">"splinterctl --use testing_store"</span>
+╭─tinkertim at localhost <span class="hljs-keyword">in</span> ~/code 26-03-11 - 12:42:14
+╰─○ splinterctl list
 Key Name                          | Epoch      | Val Len    | Named Type     
 -------------------------------------------------------------------------------------
-foo_key                           | 2          | 31         | SPL_SLOT_TYPE_VOID
-</code></pre>
-<p>You can also prefix keys with  namespace automatically. Passing <code>--prefix foo::bar::</code>
-to <code>splinterctl set zoo monkey</code> would translate to <code>set foo::bar::zoo monkey</code>, likewise
-for unset.</p>
-<p>If you want to persist the in-memory created store, you can simply run:</p>
-<pre><code class="language-bash hljs"><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/shm/test_store of=/path/to/save.spl bs=64
-</code></pre>
-<p>The same can be used to move a store from storage back to <code>/dev/shm</code>.</p>
-<p>Be sure to check out <code>lua</code> for scripting support (there's a test script in the
-repo), and <code>splinter_cli</code> directly for the interactive version with a few artful
-<code>@antirez</code> creature comforts.</p>
-<h2>Source Code</h2>
-<p>The CLI sources are <code>splinter_cli_*.c</code> as well as their included headers, which
-are named similarly. It was inspired by
-<a href="https://www.helenos.org/index.fcgi/browser/mainline/uspace/app/bdsh">BDSH</a>,
-which the author previously wrote for HelenOS.</p>
 
-    </main>
-    <footer>
-    Want To Help Fund Development?<br>
-    <div style="text-align: center; margin: 1em auto">
-      <a href="https://www.buymeacoffee.com/timthepost" id="donateLink" target="_blank">
-        <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" title="I run on coffee!" style="height: 60px !important; width: 217px !important">
-      </a>
+╭─tinkertim at localhost <span class="hljs-keyword">in</span> ~/code 26-03-11 - 12:42:17
+╰─○ splinterctl <span class="hljs-built_in">set</span> test_key <span class="hljs-string">"This is a test value from zsh."</span>
+╭─tinkertim at localhost <span class="hljs-keyword">in</span> ~/code 26-03-11 - 12:42:34
+╰─○ splinterctl get test_key
+30:This is a <span class="hljs-built_in">test</span> value from zsh.
+
+╭─tinkertim at localhost <span class="hljs-keyword">in</span> ~/code 26-03-11 - 12:42:42
+╰─○ splinterctl list         
+Key Name                          | Epoch      | Val Len    | Named Type     
+-------------------------------------------------------------------------------------
+test_key                          | 2          | 30         | SPL_SLOT_TYPE_VOID
+
+</code></pre>
+
+        </article>
+      </section>
     </div>
-    <span>Terminal ❤️ Nostalgia</span><br>
-    </footer>
-  
+  </main>
+  <footer class="container-fluid">
+    <div class="container">
+      <div class="grid">
+    <!-- Custom footer content -->
+    <span class="right notice">Powered by <a href="https://lumocs.56k.guru">Lumocs</a>, a documentation theme for <a href="https://lume.land">Lume</a>.</span>
+</div>
+    </div>
+  </footer>
 
 </body></html>

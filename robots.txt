@@ -1,6 +1,7 @@
+
+Sitemap: https://splinterhq.github.io/sitemap.xml
 User-agent: *
 Allow: /
 
 User-agent: *
 Allow: /
-Sitemap: https://splinterhq.github.io/sitemap.xml
