@@ -38,10 +38,10 @@
 <meta property="og:site_name" content="Splinter Documentation">
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Splinter Use Cases">
-<meta property="og:description" content="A physics-based breakdown of Splinter's performance, analyzing Cycles Per Operation to demonstrate its massive efficiency gains over traditional DBs.">
+<meta property="og:description" content="Use cases for the libsplinter atomic persistable KV &amp; vector store, from demanding LLM workflows to simple cache handling.">
 <meta property="og:url" content="https://splinterhq.github.io/use-cases/">
 <meta name="twitter:card" content="summary">
-<meta name="description" content="A physics-based breakdown of Splinter's performance, analyzing Cycles Per Operation to demonstrate its massive efficiency gains over traditional DBs.">
+<meta name="description" content="Use cases for the libsplinter atomic persistable KV &amp; vector store, from demanding LLM workflows to simple cache handling.">
 <meta name="keywords" content="Cycles Per Operation, IPC Performance, Lock-Free Benchmarks, Socket Tax, Hardware Optimization">
 <meta name="robots" content="index, follow">
 <meta name="generator" content="Lume 3.2.1">
@@ -49,10 +49,10 @@
 <meta property="og:site_name" content="Splinter Documentation">
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Splinter Use Cases">
-<meta property="og:description" content="A physics-based breakdown of Splinter's performance, analyzing Cycles Per Operation to demonstrate its massive efficiency gains over traditional DBs.">
+<meta property="og:description" content="Use cases for the libsplinter atomic persistable KV &amp; vector store, from demanding LLM workflows to simple cache handling.">
 <meta property="og:url" content="https://splinterhq.github.io/use-cases/">
 <meta name="twitter:card" content="summary">
-<meta name="description" content="A physics-based breakdown of Splinter's performance, analyzing Cycles Per Operation to demonstrate its massive efficiency gains over traditional DBs.">
+<meta name="description" content="Use cases for the libsplinter atomic persistable KV &amp; vector store, from demanding LLM workflows to simple cache handling.">
 <meta name="keywords" content="Cycles Per Operation, IPC Performance, Lock-Free Benchmarks, Socket Tax, Hardware Optimization">
 <meta name="robots" content="index, follow">
 <meta name="generator" content="Lume 3.2.1">
@@ -994,7 +994,32 @@
 physics experiments. Splinter tends to get used a lot like "gaffer tape" once
 you know how it works.</p>
 <p>Here are some of the most obvious / common uses:</p>
-<ol class="toc"><li><a href="#llm-runtime-%2F-rag-%2F-llm-training-uses">LLM Runtime / RAG / LLM Training Uses</a><ul><li><a href="#1.-a-hallucination-governor-(preventing-narrative-lysis)">1. A Hallucination Governor (Preventing Narrative Lysis)</a></li><li><a href="#2.-true-zero-latency-rag-(retrieval-augmented-generation)">2. True Zero-Latency RAG (Retrieval-Augmented Generation)</a></li><li><a href="#3.-user%2Fconversational-memory">3. User/Conversational Memory</a></li></ul></li><li><a href="#high-resolution-data-recording">High-Resolution Data Recording</a></li><li><a href="#configuration-%26-packaging">Configuration &amp; Packaging</a></li><li><a href="#serverless-semantic-kv">Serverless Semantic KV</a></li></ol>
+<ol class="toc"><li><a href="#basic-knowledge-graphing">Basic Knowledge Graphing</a><ul><li><a href="#exploiting-the-%22signal-arena%22-for-graph-traversal">Exploiting the "Signal Arena" for Graph Traversal</a></li></ul></li><li><a href="#llm-runtime-%2F-rag-%2F-llm-training-uses">LLM Runtime / RAG / LLM Training Uses</a><ul><li><a href="#1.-a-hallucination-governor-(preventing-narrative-lysis)">1. A Hallucination Governor (Preventing Narrative Lysis)</a></li><li><a href="#2.-true-zero-latency-rag-(retrieval-augmented-generation)">2. True Zero-Latency RAG (Retrieval-Augmented Generation)</a></li><li><a href="#3.-user%2Fconversational-memory">3. User/Conversational Memory</a></li></ul></li><li><a href="#high-resolution-data-recording">High-Resolution Data Recording</a></li><li><a href="#configuration-%26-packaging">Configuration &amp; Packaging</a></li><li><a href="#serverless-semantic-kv">Serverless Semantic KV</a></li><li><a href="#just-a-great-cache-implementation">Just A Great Cache Implementation</a></li></ol>
+<h2 id="basic-knowledge-graphing" tabindex="-1"><a href="#basic-knowledge-graphing" class="header-anchor">Basic Knowledge Graphing</a></h2>
+<p>While limited to a total of 64 relations <em>as-is</em>, Splinter's bloom tagging and
+filtering help store understandings of relationships between different data.</p>
+<h3 id="exploiting-the-%22signal-arena%22-for-graph-traversal" tabindex="-1"><a href="#exploiting-the-%22signal-arena%22-for-graph-traversal" class="header-anchor">Exploiting the "Signal Arena" for Graph Traversal</a></h3>
+<p>The most powerful aspect of Splinter for this use case is the
+<code>splinter_pulse_watchers()</code> and <code>signal_groups</code> logic. In a traditional graph,
+finding related nodes requires "traversing" edges. In Splinter, you can implement
+Reactive Graph Traversal:</p>
+<ul>
+<li>
+<p>The Scenario: Agent A (a Sales Bot) detects a "Pricing Dispute" in a chat log.</p>
+</li>
+<li>
+<p>The Action: It pulses the signal_group associated with the bloom_mask for
+"Urgent_Escalation."</p>
+</li>
+<li>
+<p>The Result: Agent B (a Manager Bot), which is "watching" that specific bitmask
+via splinter_watch_label_register, is instantly woken up via the Signal Arena.</p>
+</li>
+</ul>
+<p>This turns the Bloom filter from a passive filter into a real-time event router
+based on the graph's state.</p>
+<p>It's limited also because there's no real way to write information at the edges,
+but it's also less than 1k lines of code.</p>
 <h2 id="llm-runtime-%2F-rag-%2F-llm-training-uses" tabindex="-1"><a href="#llm-runtime-%2F-rag-%2F-llm-training-uses" class="header-anchor">LLM Runtime / RAG / LLM Training Uses</a></h2>
 <p>Large Language Models are brilliant, but they suffer from severe amnesia. The
 current industry solution to this is to bolt on a traditional Vector Database,
@@ -1020,17 +1045,18 @@ slot.</li>
 <p>So, what can you actually <em>build</em> with those tools?</p>
 <h3 id="1.-a-hallucination-governor-(preventing-narrative-lysis)" tabindex="-1"><a href="#1.-a-hallucination-governor-(preventing-narrative-lysis)" class="header-anchor">1. A Hallucination Governor (Preventing Narrative Lysis)</a></h3>
 <p>Because Splinter operates at L3 cache speeds, it can sit <em>inside</em> the LLM's
-auto-regressive generation loop. This lets observers use read-only <strong>pointer-level</strong>
-access to watch what's happening in real-time and:</p>
+auto-regressive generation loop. This lets observers use read-only
+<strong>pointer-level</strong> access to watch what's happening in real-time and:</p>
 <ul>
-<li>Prompt the model back into alignment based on token pattern fingerprints (a module for token-level threat detection is in development right now)</li>
+<li>Prompt the model back into alignment based on token pattern fingerprints (a
+module for token-level threat detection is in development right now)</li>
 <li>Halt generation</li>
 <li>Escalate conversation distrust</li>
 <li>Trigger costlier string-level inspections</li>
 </ul>
 <p>Logging uncertainty at inference and emitting special <code>&lt;UNC_explanation&gt;</code> tokens
-lets you watch for these events <em>very</em> specifically. A second inference engine will
-ship end-of-March 2026 with more code to show how this can work.</p>
+lets you watch for these events <em>very</em> specifically. A second inference engine
+will ship end-of-March 2026 with more code to show how this can work.</p>
 <h3 id="2.-true-zero-latency-rag-(retrieval-augmented-generation)" tabindex="-1"><a href="#2.-true-zero-latency-rag-(retrieval-augmented-generation)" class="header-anchor">2. True Zero-Latency RAG (Retrieval-Augmented Generation)</a></h3>
 <p>In traditional RAG, embedding vectors are serialized and dragged across the
 kernel boundary. With Splinter, the inference engine (like <code>llama.cpp</code>) simply
@@ -1038,36 +1064,43 @@ casts a raw C-pointer to the L3 cache. When a user asks a 70B parameter model a
 question, the context injection happens instantly. You are feeding the AI its
 own memories at the speed of the hardware bus.</p>
 <h3 id="3.-user%2Fconversational-memory" tabindex="-1"><a href="#3.-user%2Fconversational-memory" class="header-anchor">3. User/Conversational Memory</a></h3>
-<p>Splinter provides auditable memory and is especially good at agentic coordination
-thanks to raw pointer sharing. Many models can work on a single context window along
-with their own independent scratch pads, all in the same store.</p>
-<p>You can also use Splinter to store embeddings-enriched chat transcripts, for easy
-semantic recollection. Combined with bloom tags, it's a powerful base memory
-substrate.</p>
+<p>Splinter provides auditable memory and is especially good at agentic
+coordination thanks to raw pointer sharing. Many models can work on a single
+context window along with their own independent scratch pads, all in the same
+store.</p>
+<p>You can also use Splinter to store embeddings-enriched chat transcripts, for
+easy semantic recollection. Combined with bloom tags, it's a powerful base
+memory substrate.</p>
 <h2 id="high-resolution-data-recording" tabindex="-1"><a href="#high-resolution-data-recording" class="header-anchor">High-Resolution Data Recording</a></h2>
 <p>One second of time might represent:</p>
 <ul>
 <li>One second of audio</li>
 <li>One second of video</li>
-<li>One second of 20 sensors, each with three orders (velocity, acceleration, jitter)</li>
+<li>One second of 20 sensors, each with three orders (velocity, acceleration,
+jitter)</li>
 <li>One second of one or more multi-strata tensors</li>
 </ul>
-<p>... simultaneously. Traditional relational databases don't always lend
-well to fidelity in timing. Splinter is designed to capture data as fast
-as possible, with lots of helpers to backfill what can be derived later.</p>
-<p>This lets you capture vectors of motion with the motion as fast as the L3 cache of
-your hardware will let you. It's great for field monitoring of all kinds, and due to
-static geometry, much kinder to flash-based storage.</p>
+<p>... simultaneously. Traditional relational databases don't always lend well to
+fidelity in timing. Splinter is designed to capture data as fast as possible,
+with lots of helpers to backfill what can be derived later.</p>
+<p>This lets you capture vectors of motion with the motion as fast as the L3 cache
+of your hardware will let you. It's great for field monitoring of all kinds, and
+due to static geometry, much kinder to flash-based storage.</p>
 <h2 id="configuration-%26-packaging" tabindex="-1"><a href="#configuration-%26-packaging" class="header-anchor">Configuration &amp; Packaging</a></h2>
 <p>Slots are great places to package binaries, documentation, or whatever else you
 need persistently, and then re-use the store for configuration once you unpack.</p>
 <p>You can also just use it for a configuration database, or a place to control
 customer feature flags, etc.</p>
 <h2 id="serverless-semantic-kv" tabindex="-1"><a href="#serverless-semantic-kv" class="header-anchor">Serverless Semantic KV</a></h2>
-<p>Splinter's persistent stores work wonderfully well on DenoKV; use persistent mode
-and bloom with pre-filled embeddings to help serve "psychic" ads at the edge, or
-whatever you need to serve.</p>
+<p>Splinter's persistent stores work wonderfully well on DenoKV; use persistent
+mode and bloom with pre-filled embeddings to help serve "psychic" ads at the
+edge, or whatever you need to serve.</p>
 <p>If it allows access to <code>mmap()</code>, Splinter will work on it.</p>
+<h2 id="just-a-great-cache-implementation" tabindex="-1"><a href="#just-a-great-cache-implementation" class="header-anchor">Just A Great Cache Implementation</a></h2>
+<p>You can build Splinter without embeddings or any other advanced storage options
+and use it solely as a socket-less cache server that supports atomic integer
+operations and easy persistence. You implement your own eviction strategy (if
+you need one), with whatever governance you choose.</p>
 
         </article>
       </section>

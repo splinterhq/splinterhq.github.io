@@ -989,18 +989,18 @@
         <article>
           <h1>Splinter's <code>splinter_cli</code> and <code>splinterctl</code> Programs</h1>
 <blockquote>
-<p class="note">A persistent version of these programs exists as "splinterp_cli"
-and "splinterpctl", respectively.</p>
+<p class="note">A persistent version of these programs exists as "splinterp_cli" and
+"splinterpctl", respectively.</p>
 </blockquote>
-<p>The <code>splinter_cli</code> program is a REPL-like environment in which you
-can explore and control Splinter stores. You can do things like list,
-set and update keys, run Lua scripts, manage bloom labels, couple tandem
-keys, and other common tasks.</p>
-<p>It features built-in tab completion and hinting, online help for all
-commands and consistency in behavior wherever possible. It serves not
-just as a way to implement functionality, but also to illustrate how
-the library can be used to build "just enough" storage for any project
-that uses KV and vectors over the same physical network.</p>
+<p>The <code>splinter_cli</code> program is a REPL-like environment in which you can explore
+and control Splinter stores. You can do things like list, set and update keys,
+run Lua scripts, manage bloom labels, couple tandem keys, and other common
+tasks.</p>
+<p>It features built-in tab completion and hinting, online help for all commands
+and consistency in behavior wherever possible. It serves not just as a way to
+implement functionality, but also to illustrate how the library can be used to
+build "just enough" storage for any project that uses KV and vectors over the
+same physical network.</p>
 <ol class="toc"><li><a href="#command-help-vs-tool-help">Command Help Vs Tool Help</a></li><li><a href="#environmental-variables">Environmental Variables</a></li><li><a href="#files">Files</a></li><li><a href="#splinterctl-special-invocation">splinterctl Special Invocation</a><ul><li><a href="#example---splinter_cli-vs-splinterctl%3A">Example - splinter_cli vs splinterctl:</a></li></ul></li></ol>
 <h2 id="command-help-vs-tool-help" tabindex="-1"><a href="#command-help-vs-tool-help" class="header-anchor">Command Help Vs Tool Help</a></h2>
 <p>There are commands <code>splinter_cli</code> understands how to run, which are:</p>
@@ -1026,8 +1026,8 @@ that uses KV and vectors over the same physical network.</p>
  lua        | Run a lua script                                            
  orders     | Manage standard vector orders of a key
 </code></pre>
-<p>There's also a way in which <code>splinterctl</code> / <code>splinter_cli</code> should <em>be</em>
-run, which you can get by passing <code>--help</code> to either:</p>
+<p>There's also a way in which <code>splinterctl</code> / <code>splinter_cli</code> should <em>be</em> run,
+which you can get by passing <code>--help</code> to either:</p>
 <pre><code class="language-sh hljs language-bash">Usage:  splinterctl [options] [arguments] *or*
         splinterctl --no-repl &lt;built <span class="hljs-keyword">in</span> <span class="hljs-built_in">command</span>&gt; [arguments] *or*
         splinterctl {no args <span class="hljs-keyword">for</span> REPL}
@@ -1053,27 +1053,27 @@ the SPLINTER_NS_PREFIX environmental variable.
 <h2 id="environmental-variables" tabindex="-1"><a href="#environmental-variables" class="header-anchor">Environmental Variables</a></h2>
 <p>Both tools look for the following environmental variables:</p>
 <ul>
-<li><code>SPLINTER_NS_PREFIX</code> - prepended to every I/O operation (allows auto namespacing)</li>
+<li><code>SPLINTER_NS_PREFIX</code> - prepended to every I/O operation (allows auto
+namespacing)</li>
 <li><code>SPLINTER_HISTORY_FILE</code> - Default is <code>~/.splinter_history</code></li>
 <li><code>SPLINTER_DEFAULT_STORE</code> - CLI will load this store if set and valid</li>
 <li><code>HOME</code> - Home directory (system setting)</li>
 <li><code>TERM</code> - Terminal Slug (e.g. <code>xterm-256color</code> - system setting)</li>
 </ul>
 <h2 id="files" tabindex="-1"><a href="#files" class="header-anchor">Files</a></h2>
-<p><code>${HOME}/.splinterrc</code> is an (optional) list of ctags-style labels before
-hex or binary codes that they represent. For instance:</p>
+<p><code>${HOME}/.splinterrc</code> is an (optional) list of ctags-style labels before hex or
+binary codes that they represent. For instance:</p>
 <pre><code class="language-sh hljs language-bash">urgent-label 0x1
 debug-label 0x4
 </code></pre>
-<p>63 labels can be used (64 are possible, but the 64th is reserved
-for proximity)</p>
+<p>63 labels can be used (64 are possible, but the 64th is reserved for proximity)</p>
 <h2 id="splinterctl-special-invocation" tabindex="-1"><a href="#splinterctl-special-invocation" class="header-anchor"><code>splinterctl</code> Special Invocation</a></h2>
-<p><code>splinterctl</code> is a symbolic link to <code>splinter_cli</code> that causes the CLI
-to skip REPL setup and some other terminal handling so that you can
-specify commands right on the command line.</p>
+<p><code>splinterctl</code> is a symbolic link to <code>splinter_cli</code> that causes the CLI to skip
+REPL setup and some other terminal handling so that you can specify commands
+right on the command line.</p>
 <h3 id="example---splinter_cli-vs-splinterctl%3A" tabindex="-1"><a href="#example---splinter_cli-vs-splinterctl%3A" class="header-anchor">Example - <code>splinter_cli</code> vs <code>splinterctl</code>:</a></h3>
-<p>This is an example of doing the same thing in the interactive REPL-like
-console (<code>splinter_cli</code>) vs just using <code>splinterctl</code> for one-off commands.</p>
+<p>This is an example of doing the same thing in the interactive REPL-like console
+(<code>splinter_cli</code>) vs just using <code>splinterctl</code> for one-off commands.</p>
 <pre><code class="language-sh hljs language-bash">splinter_cli
 splinter_cli version 1.1.6 build 857b1f1
 To quit, press ctrl-c or ctrl-d.
@@ -1091,11 +1091,11 @@ testing_store <span class="hljs-comment"># set test_key "This is a test value."<
 testing_store <span class="hljs-comment"># get test_key</span>
 21:This is a <span class="hljs-built_in">test</span> value.
 
-testing_store <span class="hljs-comment"># </span>
+testing_store <span class="hljs-comment">#</span>
 </code></pre>
-<p>And using <code>splinterctl</code> with just <code>zsh</code>. Note, here we make use of
-the shell's <code>alias</code> functionality so that we don't have to keep
-adding <code>--use testing_store</code> each time:</p>
+<p>And using <code>splinterctl</code> with just <code>zsh</code>. Note, here we make use of the shell's
+<code>alias</code> functionality so that we don't have to keep adding <code>--use testing_store</code>
+each time:</p>
 <pre><code class="language-sh hljs language-bash">╭─tinkertim at localhost <span class="hljs-keyword">in</span> ~/code 26-03-11 - 12:41:52
 ╰─○ splinterctl init testing_store
 Initializing store: testing_store
@@ -1119,7 +1119,6 @@ Key Name                          | Epoch      | Val Len    | Named Type
 Key Name                          | Epoch      | Val Len    | Named Type     
 -------------------------------------------------------------------------------------
 test_key                          | 2          | 30         | SPL_SLOT_TYPE_VOID
-
 </code></pre>
 
         </article>
