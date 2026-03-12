@@ -994,15 +994,15 @@
 physics experiments. Splinter tends to get used a lot like "gaffer tape" once
 you know how it works.</p>
 <p>Here are some of the most obvious / common uses:</p>
-<ol class="toc"><li><a href="#basic-knowledge-graphing">Basic Knowledge Graphing</a><ul><li><a href="#exploiting-the-%22signal-arena%22-for-graph-traversal">Exploiting the "Signal Arena" for Graph Traversal</a></li></ul></li><li><a href="#llm-runtime-%2F-rag-%2F-llm-training-uses">LLM Runtime / RAG / LLM Training Uses</a><ul><li><a href="#1.-a-hallucination-governor-(preventing-narrative-lysis)">1. A Hallucination Governor (Preventing Narrative Lysis)</a></li><li><a href="#2.-true-zero-latency-rag-(retrieval-augmented-generation)">2. True Zero-Latency RAG (Retrieval-Augmented Generation)</a></li><li><a href="#3.-user%2Fconversational-memory">3. User/Conversational Memory</a></li></ul></li><li><a href="#high-resolution-data-recording">High-Resolution Data Recording</a></li><li><a href="#configuration-%26-packaging">Configuration &amp; Packaging</a></li><li><a href="#serverless-semantic-kv">Serverless Semantic KV</a></li><li><a href="#just-a-great-cache-implementation">Just A Great Cache Implementation</a></li></ol>
+<ol class="toc"><li><a href="#basic-knowledge-graphing">Basic Knowledge Graphing</a><ul><li><a href="#exploiting-the-%22signal-arena%22-for-graph-traversal">Exploiting the "Signal Arena" for Graph Traversal</a></li><li><a href="#%22agentic-labeling%22-and-semantic-overlap">"Agentic Labeling" and Semantic Overlap</a></li></ul></li><li><a href="#llm-runtime-%2F-rag-%2F-llm-training-uses">LLM Runtime / RAG / LLM Training Uses</a><ul><li><a href="#1.-a-hallucination-governor-(preventing-narrative-lysis)">1. A Hallucination Governor (Preventing Narrative Lysis)</a></li><li><a href="#2.-true-zero-latency-rag-(retrieval-augmented-generation)">2. True Zero-Latency RAG (Retrieval-Augmented Generation)</a></li><li><a href="#3.-user%2Fconversational-memory">3. User/Conversational Memory</a></li></ul></li><li><a href="#high-resolution-data-recording">High-Resolution Data Recording</a></li><li><a href="#configuration-%26-packaging">Configuration &amp; Packaging</a></li><li><a href="#serverless-semantic-kv">Serverless Semantic KV</a></li><li><a href="#just-a-great-cache-implementation">Just A Great Cache Implementation</a></li></ol>
 <h2 id="basic-knowledge-graphing" tabindex="-1"><a href="#basic-knowledge-graphing" class="header-anchor">Basic Knowledge Graphing</a></h2>
 <p>While limited to a total of 64 relations <em>as-is</em>, Splinter's bloom tagging and
 filtering help store understandings of relationships between different data.</p>
 <h3 id="exploiting-the-%22signal-arena%22-for-graph-traversal" tabindex="-1"><a href="#exploiting-the-%22signal-arena%22-for-graph-traversal" class="header-anchor">Exploiting the "Signal Arena" for Graph Traversal</a></h3>
 <p>The most powerful aspect of Splinter for this use case is the
 <code>splinter_pulse_watchers()</code> and <code>signal_groups</code> logic. In a traditional graph,
-finding related nodes requires "traversing" edges. In Splinter, you can implement
-Reactive Graph Traversal:</p>
+finding related nodes requires "traversing" edges. In Splinter, you can
+implement Reactive Graph Traversal:</p>
 <ul>
 <li>
 <p>The Scenario: Agent A (a Sales Bot) detects a "Pricing Dispute" in a chat log.</p>
@@ -1020,6 +1020,28 @@ via splinter_watch_label_register, is instantly woken up via the Signal Arena.</
 based on the graph's state.</p>
 <p>It's limited also because there's no real way to write information at the edges,
 but it's also less than 1k lines of code.</p>
+<h3 id="%22agentic-labeling%22-and-semantic-overlap" tabindex="-1"><a href="#%22agentic-labeling%22-and-semantic-overlap" class="header-anchor">"Agentic Labeling" and Semantic Overlap</a></h3>
+<p>Suppose you let agents modify the bloom, but not the key or value region
+(reasonable).</p>
+<p>That opens up a kind of fuzzy matching; If multiple agents use the same hashing
+strategy for their labels, Splinter’s Bloom filter naturally handles Semantic
+Overlap:</p>
+<ul>
+<li>
+<p>If Agent A labels a node with 0x01 (Finance) and Agent B labels it with 0x02
+(Legal), the slot's mask becomes 0x03.</p>
+</li>
+<li>
+<p>An LLM agent looking for "Financial-Legal" overlaps can query the mask 0x03.</p>
+</li>
+<li>
+<p>Because Bloom filters can have false positives (but never false negatives),
+the agent might get a few "extra" hits, but it will never miss a valid
+connection.</p>
+</li>
+</ul>
+<p>For a Knowledge Graph, this acts as a "Fuzzy Discovery" mechanism. It's not
+perfect but <code>&lt;gestures at code size again&gt;</code> you get a lot for a little.</p>
 <h2 id="llm-runtime-%2F-rag-%2F-llm-training-uses" tabindex="-1"><a href="#llm-runtime-%2F-rag-%2F-llm-training-uses" class="header-anchor">LLM Runtime / RAG / LLM Training Uses</a></h2>
 <p>Large Language Models are brilliant, but they suffer from severe amnesia. The
 current industry solution to this is to bolt on a traditional Vector Database,
