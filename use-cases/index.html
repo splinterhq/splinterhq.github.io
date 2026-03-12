@@ -1114,10 +1114,12 @@ need persistently, and then re-use the store for configuration once you unpack.<
 <p>You can also just use it for a configuration database, or a place to control
 customer feature flags, etc.</p>
 <h2 id="serverless-semantic-kv" tabindex="-1"><a href="#serverless-semantic-kv" class="header-anchor">Serverless Semantic KV</a></h2>
-<p>Splinter's persistent stores work wonderfully well on DenoKV; use persistent
+<p>Splinter's persistent stores work wonderfully well on Deno Deploy; use persistent
 mode and bloom with pre-filled embeddings to help serve "psychic" ads at the
 edge, or whatever you need to serve.</p>
 <p>If it allows access to <code>mmap()</code>, Splinter will work on it.</p>
+<p>Splinter isn't a replacement for DenoKV; it's a separate local cache that doesn't
+have the replicated backing, so keep it ephemeral.</p>
 <h2 id="just-a-great-cache-implementation" tabindex="-1"><a href="#just-a-great-cache-implementation" class="header-anchor">Just A Great Cache Implementation</a></h2>
 <p>You can build Splinter without embeddings or any other advanced storage options
 and use it solely as a socket-less cache server that supports atomic integer
