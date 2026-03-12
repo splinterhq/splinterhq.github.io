@@ -1010,8 +1010,10 @@ stripped-down build + Rust bindings <span class="hljs-keyword">for</span> it. Ed
 If unsure <span class="hljs-built_in">where</span> to start, try <span class="hljs-string">'make mini'</span> - it requires no dependencies and
 enables many features.
 </code></pre>
-<p><strong>Most users will just want to type <code>make prod</code></strong>. See the <code>Makefile</code> for how
-CMake options work.</p>
+<p><strong>Most users will just want to type <code>make prod</code></strong>, if you have the Lua and Numa
+development packages installed on your system. Otherwise, try <code>make mini</code> to build
+with just the self-contained features like embeddings / cli / etc.</p>
+<p>See the <code>Makefile</code> for how CMake options work.</p>
 <h2 id="manual-build-configuration-(cmake)" tabindex="-1"><a href="#manual-build-configuration-(cmake)" class="header-anchor">Manual Build Configuration (CMake)</a></h2>
 <p>You can also run CMake manually:</p>
 <pre><code class="language-bash hljs">git <span class="hljs-built_in">clone</span> git@bitbucket.org:tinkertim/libsplinter.git
@@ -1024,6 +1026,11 @@ cmake -D{your flags} ..
 ctest --output-on-failure
 <span class="hljs-built_in">sudo</span> -E make install
 </code></pre>
+<h2 id="note-on-sudo--e-with-rust-during-make-install%3A" tabindex="-1"><a href="#note-on-sudo--e-with-rust-during-make-install%3A" class="header-anchor">Note on <code>sudo -E</code> With Rust During <code>make install</code>:</a></h2>
+<p>If building the Rust bindings, make sure you preserve the
+user environment (<code>-E</code>) when using <code>sudo</code> for <code>make install</code>.</p>
+<p>Otherwise, Rust might not be able to resolve locations and
+the build will fail.</p>
 
         </article>
       </section>
