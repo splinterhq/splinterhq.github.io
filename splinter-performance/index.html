@@ -1067,42 +1067,15 @@ CPO to drop into the single digits.</p>
 </ul>
 <h3 id="the-math-of-the-claim" tabindex="-1"><a href="#the-math-of-the-claim" class="header-anchor">The Math of the Claim</a></h3>
 <p>If we conservatively estimate the AMD rig hits <strong>500,000,000 ops/sec</strong> (0.5
-Billion), the physics becomes undeniable:</p>
+Billion), it becomes hard to argue with the physics:</p>
 <p>$$CPO_{AMD} = \frac{5,000,000,000 \text{ cycles/sec (est. clock)}}{500,000,000 \text{ ops/sec}} = \mathbf{10 \text{ cycles/op}}$$</p>
 <p>This represents a <strong>2,300x improvement in efficiency</strong> over the traditional i3
 baseline (23,076 / 10).</p>
-<h2 id="a-summary-for-those-spending-research-budgets%3A" tabindex="-1"><a href="#a-summary-for-those-spending-research-budgets%3A" class="header-anchor">A Summary For Those Spending Research Budgets:</a></h2>
-<p>While traditional architectures are restricted by a <strong>Series of Jerks</strong>—our term
-for the erratic overhead of interrupts and context switching, Splinter functions
-as a <strong>Laminar Flow Substrate</strong>. On commodity hardware, Splinter already
-outperforms Redis by <strong>16x</strong> and SQLite3 by <strong>33x</strong>, despite memory throttling.</p>
-<p>Moving to an AMD rig with NUMA-pinning will allow us to achieve a projected <strong>10
-cycles per operation</strong>. At this scale, Splinter isn't just "faster"—it is
-operating at the physical limit of the silicon, achieving <strong>~2,300 times the
-efficiency</strong> of standard middleware by removing the "Socket Tax" entirely.</p>
-<p><strong>Baseline: i3-1115G4 @ 3.0GHz</strong></p>
-<p>Traditional Middleware (130k ops/sec):
-$$\frac{3 \times 10^9}{130,000} \approx 23,076 \text{ cycles/op}$$</p>
-<p>Splinter Standard (3.2M ops/sec):
-$$\frac{3 \times 10^9}{3,200,000} \approx 937 \text{ cycles/op}$$</p>
-<p><strong>Projected: AMD Rig (NUMA-Pinned @ 5.0GHz Clock):</strong></p>
-<p>We're in the process of seeking/acquiring additional funding for development and
-plan to transition to "big iron" now that we're certain we can support weaker
-memory models sufficiently.</p>
-<p>To help substantiate the need to grow the computational lab, we had to consider
-what we could do (GDELT is massive) with higher-resolution samplings. We knew it
-was high but the math was a little startling:</p>
-<p><strong>Splinter Conservative Estimate (500M ops/sec):</strong></p>
-<p>$$\frac{5 \times 10^9}{500,000,000} = 10 \text{ cycles/op}$$</p>
-<p><strong>The Efficiency Delta:</strong></p>
-<p>The jump from <strong>23,076</strong> cycles to <strong>10</strong> cycles per operation represents a
-<strong>2,300x</strong> reduction in the computational energy required to audit the manifolds
-examined in high-resolution research.</p>
-<p>We expect this will be the experience of teams working with massive amounts of
-vectors, or timing Rank 2+ tensor measurements (as we do) and invite additional
-use as well as scrutiny and feedback.</p>
-<p>If you're still here, you might be interested in reading about
-<a href="../splinter-and-linux">why Splinter and Linux get along so well</a>.</p>
+<h2 id="tl%3Bdr%3A-splinter-can-save-you-significant-research-%24%24%24" tabindex="-1"><a href="#tl%3Bdr%3A-splinter-can-save-you-significant-research-%24%24%24" class="header-anchor">TL;DR: Splinter Can Save You Significant Research $$$</a></h2>
+<p>With a little work, you get the kind of high-speed ingestion on commodity
+hardware enterprise is currently getting on big-iron.</p>
+<p>If you manage to get big-iron, speed is no longer a concern for you.</p>
+<p>It just needs space to persist when not in RAM.</p>
 
         </article>
       </section>
