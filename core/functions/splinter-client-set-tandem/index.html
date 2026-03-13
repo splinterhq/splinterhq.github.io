@@ -38,22 +38,22 @@
 <meta property="og:site_name" content="Splinter Documentation">
 <meta property="og:locale" content="en">
 <meta property="og:title" content="splinter_client_set_tandem">
-<meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta property="og:description" content="Documentation on combining keys as tandem for standard order storage in Splinter, an atomic L3-speed key-value &amp; vector store that resides in Linux shared…">
 <meta property="og:url" content="https://splinterhq.github.io/core/functions/splinter-client-set-tandem/">
 <meta name="twitter:card" content="summary">
-<meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
+<meta name="description" content="Documentation on combining keys as tandem for standard order storage in Splinter, an atomic L3-speed key-value &amp; vector store that resides in Linux shared…">
+<meta name="keywords" content="Vector Anti-Database, Vector Storage, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
 <meta name="robots" content="index, follow">
 <meta name="generator" content="Lume 3.2.1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Splinter Documentation">
 <meta property="og:locale" content="en">
 <meta property="og:title" content="splinter_client_set_tandem">
-<meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
+<meta property="og:description" content="Documentation on combining keys as tandem for standard order storage in Splinter, an atomic L3-speed key-value &amp; vector store that resides in Linux shared…">
 <meta property="og:url" content="https://splinterhq.github.io/core/functions/splinter-client-set-tandem/">
 <meta name="twitter:card" content="summary">
-<meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
+<meta name="description" content="Documentation on combining keys as tandem for standard order storage in Splinter, an atomic L3-speed key-value &amp; vector store that resides in Linux shared…">
+<meta name="keywords" content="Vector Anti-Database, Vector Storage, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
 <meta name="robots" content="index, follow">
 <meta name="generator" content="Lume 3.2.1">
 <link rel="icon" sizes="32x32" href="/favicon.ico">
@@ -987,7 +987,47 @@
   </ul>      
         </header>
         <article>
-          <h1><code>splinter_client_set_tandem()</code>: Set a tandem slot configuration</h1>
+          <h1><code>splinter_client_set_tandem()</code>: Tandem Slot Config</h1>
+<p>Tandem slots are useful when you need to group independent signals from the same sensor together with  independent vectors per-sensor.Or, more laconically: tandem slots let you capture standard orders and their vectors as independent copies of the same variable.</p>
+<p>In your experiment, where you have:</p>
+<ul>
+<li>x(thing): Normalized (thing)</li>
+<li>ẋ(thing): Velocity Of (thing)</li>
+<li>ẍ(thing): Acceleration Of (thing)</li>
+</ul>
+<p>You could access these and their vectors in splinter as <code>x</code>, <code>x.1</code> and <code>x.2</code> independently and respectively.</p>
+<p>Tandem setup makes sure housekeeping works on all I/O (including unset) so that you don't have to worry about it. There's no hard limit to how many orders of the same key you can have, except the number of slots.</p>
+<p>See the <a href="../../constants">constants</a> documentation for information on how to change the special accessor (<code>.</code>) to something less likely to appear in your own key space.</p>
+<h2 id="prototype-%26-rationale" tabindex="-1"><a href="#prototype-%26-rationale" class="header-anchor">Prototype &amp; Rationale</a></h2>
+<pre><code class="language-c hljs"><span class="hljs-type">int</span> <span class="hljs-title function_">splinter_client_set_tandem</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *base_key, <span class="hljs-type">const</span> <span class="hljs-type">void</span> **vals <span class="hljs-type">const</span> <span class="hljs-type">size_t</span> *lens, <span class="hljs-type">uint8_t</span> orders)</span>;
+</code></pre>
+<p>The <code>base_key</code> is the string identifier for the parent (<code>x</code>) slot. <code>vals</code> is an array of void pointers, to temporarily hold the child keys while the tandem slots are created. <code>lens</code> is an array of <code>size_t</code> used side-by-side with <code>vals</code> to track the arena length. <code>orders</code> are the number of tandem slots being requested.</p>
+<h2 id="return-value%3A" tabindex="-1"><a href="#return-value%3A" class="header-anchor">Return Value:</a></h2>
+<p>On success, 0 is returned. Return values less than zero indicate failure. <code>errno</code> currently is not set, but future versions will likely change that.</p>
+<h2 id="example%3A" tabindex="-1"><a href="#example%3A" class="header-anchor">Example:</a></h2>
+<p>See CLI &amp; Tooling Examples.</p>
+<h3 id="cli-%26-tooling-example-uses%3A" tabindex="-1"><a href="#cli-%26-tooling-example-uses%3A" class="header-anchor">CLI &amp; Tooling Example Uses:</a></h3>
+<p>To see <code>splinter_client_set_tandem()</code> in-use within the tools that ship with Splinter, see the following files:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>What <code>splinter_client_set_tandem()</code> Does There</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>splinter.c</code></td>
+<td>Base library implementation</td>
+</tr>
+<tr>
+<td><code>splinter_cli_cmd_orders.c</code></td>
+<td>The CLI <code>orders</code> command.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="see-also%3A" tabindex="-1"><a href="#see-also%3A" class="header-anchor">See Also:</a></h3>
+<p>The following is also relevant: <a href="../splinter-client-unset-tandem"><code>splinter_client_unset_tandem()</code></a></p>
 
         </article>
       </section>
