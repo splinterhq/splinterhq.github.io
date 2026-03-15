@@ -1060,9 +1060,9 @@ loadable shard, or no eviction at all. Splinter doesn't care.</li>
 <p>Most database designs combine storage and computation in one server layer, and
 then provide a client that can interact with it and abstract transactions.</p>
 <p>Splinter takes another approach - in order to minimize disruption needed to
-complete a transaction, the <em>client</em> is required to do whatever computation
-is necessary while the storage layer remains gapped and only performs low-complexity/
-low-computation bitwise operations on keys in-place.</p>
+complete a transaction, the <em>client</em> is required to do whatever computational
+heap allocation is necessary while the storage layer remains gapped and only
+performs only bitwise operations on keys in-place (twiddling existing bits).</p>
 <p>Splinter does not provide automatic ANN clustering; it leaves that as an
 exercise for the client, if the client needs it. See <a href="shards">Splinter Shards</a>
 for more about how this works. Splinter will include a set of default shards
@@ -1070,7 +1070,8 @@ to handle basic clustering and eviction strategies as examples of how the librar
 is intended to work.</p>
 <p>While "clients" usually reside on the same machine, they have their own <em>heap</em>
 in addition to the shared pool, and that's what Splinter utilizes for computation.
-We never "slosh" in still water.</p>
+We never "slosh" in still water, and design to prevent thundering hurds through
+cooperative logic scheduling.</p>
 <h3 id="the-%22good-process-neighbor%22-approach" tabindex="-1"><a href="#the-%22good-process-neighbor%22-approach" class="header-anchor">The "Good Process Neighbor" Approach</a></h3>
 <p><em>(Even though technically only the CLI or client code is the process because
 Splinter itself is just a place, not a process)</em></p>
