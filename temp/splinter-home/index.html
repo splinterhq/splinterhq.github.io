@@ -1,8 +1,636 @@
 <!DOCTYPE html>
 <html lang="en"><head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+
+    <link rel="canonical" href="https://splinterhq.github.io/temp/splinter-home/">
+
+    <title>Splinter Documentation - hexagon.56k.guru</title>
+ 
+    <!-- Pico CSS -->
+    <link rel="stylesheet" href="../../css/pico.min.css" inline="">
+
+    <!-- Font Awesome -->
+    <link href="../../css/font-awesome.css" rel="stylesheet">
+
+    <!-- GitHub Dark Hightlight.js Theme -->
+    <link href="../../css/github-dark.min.css" rel="stylesheet">
+
+    <!-- Lumocs CSS -->
+    <link href="../../css/palette.css" rel="stylesheet" inline="">
+    <link href="../../css/general.css" rel="stylesheet" inline="">
+    <link href="../../css/sidebar.css" rel="stylesheet" inline="">
+    <link href="../../css/blockquotes.css" rel="stylesheet" inline="">
+    
+    <!-- Lumocs JS -->
+    <script src="../../js/theme-switcher.js" inline=""></script>
+    <script src="../../js/hamburger.js" inline=""></script>
+    <script src="../../js/hierarchy.js" inline=""></script>
+
+    <!-- Overridable custom content -->
+    <meta name="google-site-verification" content="cFJqGxOZGxw1APr0yrQthB4Ml5vFuMNBu39xMS4BYJI">
+<script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
+</script>
+<script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init Dr qr Ci Br Zr Pr capture calculateEventProperties Ur register register_once register_for_session unregister unregister_for_session Xr getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Jr identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Gr Hr createPersonProfile setInternalOrTestUser Wr Fr tn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $r debug ki Yr getPageViewId captureTraceFeedback captureTraceMetric Rr".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_ybcbWc4exLbiNZVu3DF9n6z2DdT2FZafCnVh5uoypa3S', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2026-01-30',
+        person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
+    })
+</script>
+
+
+  <meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Documentation">
+<meta property="og:locale" content="en">
+<meta property="og:url" content="https://splinterhq.github.io/temp/splinter-home/">
+<meta name="twitter:card" content="summary">
+<meta name="generator" content="Lume 3.2.1">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Splinter Documentation">
+<meta property="og:locale" content="en">
+<meta property="og:url" content="https://splinterhq.github.io/temp/splinter-home/">
+<meta name="twitter:card" content="summary">
+<meta name="generator" content="Lume 3.2.1">
+<link rel="icon" sizes="32x32" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
+</head>
+  <body>
+  <main>
+    <!-- content -->
+    <div class="grid">
+      <!-- Sidebar -->
+      <aside>
+        <div class="aside-content">
+          
+<header>
+    <ul>
+        <!-- Hamburger Icon -->
+        <li id="hamburger-wrapper">
+        <div id="hamburger-btn">
+            <i class="fas fa-bars"></i>
+        </div>
+        </li>
+        
+        <!-- Brand Name -->
+        <li>
+            
+            <a class="navbar-brand" href="../..">
+                Splinter Documentation
+            </a>
+        </li>
+
+        <!-- Light/Dark Theme Selector -->
+        <li class="mobile right"><span class="theme-switcher"><i id="theme-icon" class="fas fa-moon"></i></span></li>
+
+        <!-- Aux Top Links -->
+        
+        <li class="mobile right">
+            <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+            <i class="fab fa-github"></i>
+            </a>
+        </li>
+        
+    </ul>
+</header>
+<section class="menu">
+    <nav>
+        
+        
+            <ul>
+                <!-- Page Hierarchy -->
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../..">Splinter — L3-Speed Shared Memory IPC</a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+                        
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold  ">
+
+                        
+                        
+                        <a href="."></a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="..">Splinter — L3-Speed Shared Memory IPC</a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+
+                    <li class="level0 bold collapsed children">
+
+                        
+                            <div class="right collapser">
+                                <i class="fas fa-chevron-down down"></i>
+                                <i class="fas fa-chevron-up up"></i>
+                            </div>
+                        
+                        
+                        <a href="../../core">Core Library</a>
+
+                        
+                            <ul>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../core/functions">Function Reference</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../core/structures">Structures &amp; Types</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../core/constants">Constants &amp; Bits</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../core/examples">Example Workday Uses</a>
+
+                                    
+                                </li>
+                            
+                            </ul>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+                        
+                        
+                    
+
+                    <li class="level0 bold collapsed children">
+
+                        
+                            <div class="right collapser">
+                                <i class="fas fa-chevron-down down"></i>
+                                <i class="fas fa-chevron-up up"></i>
+                            </div>
+                        
+                        
+                        <a href="../../bindings">Language Bindings (FFI)</a>
+
+                        
+                            <ul>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../bindings/rust">Rust</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../bindings/python">Python 3</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../bindings/java">Java</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../bindings/typescript">TypeScript</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../bindings/lua">Lua</a>
+
+                                    
+                                </li>
+                            
+
+                                
+                                
+
+                                
+                            
+                                
+                                
+
+                                
+                                
+                                <li class="level1 collapsed ">
+
+                                    
+                                    
+                                    <a href="../../bindings/shell">Shell</a>
+
+                                    
+                                </li>
+                            
+                            </ul>
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../../cli">Command Line Interfaces</a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../../shards">Splinter Logic Shards</a>
+
+                        
+                    </li>
+                
+
+                    
+                    
+                    
+
+                    
+                    
+                    
+
+                    <li class="level0 bold collapsed ">
+
+                        
+                        
+                        <a href="../../tests">Testing Splinter</a>
+
+                        
+                    </li>
+                
+            </ul>
+        
+
+        <!-- Add nav_links -->
+        
+            <ul>
+                
+                    <li>
+                        <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+                            GitHub Repository <i class="fa fa-external-link" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        
+    </nav>
+    <!-- Sidebar custom content -->
+</section>
+        </div>
+      </aside>
+      <section>
+        <header>
+            
+  <ul>
+    
+    <!--<div id="search"></div>-->
+    
+    <li>
+      
+
+
+
+<!-- Find the Current Page in Hierarchy -->
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    
+
+    
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+        
+        
+        
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+
+<!-- Display the Breadcrumbs -->
+
+
+    </li>
+    
+    <!-- Light/Dark Theme Selector -->
+    <li class="right"><span class="theme-switcher"><i id="theme-icon" class="fas fa-moon"></i></span></li>
+
+    <!-- Aux Top Links -->
+    
+      <li class="right">
+        <a href="https://github.com/splinterhq/libsplinter" title="GitHub Repository">
+          <i class="fab fa-github"></i>
+        </a>
+      </li>
+    
+    
+  </ul>      
+        </header>
+        <article>
+          
+
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Splinter — L3-Speed Shared Memory IPC</title>
+  <title></title>
   <meta name="google-site-verification" content="cFJqGxOZGxw1APr0yrQthB4Ml5vFuMNBu39xMS4BYJI">
 <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js">
 </script>
@@ -204,43 +832,18 @@
       .spl-hero h1 { font-size: 2rem; }
     }
   </style>
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Splinter Documentation">
-<meta property="og:locale" content="en">
-<meta property="og:title" content="Splinter — L3-Speed Shared Memory IPC">
-<meta property="og:description" content="Splinter is a passive, lock-free shared memory substrate for high-frequency vector and KV ingestion across disjointed runtimes. No daemon. No socket tax.…">
-<meta property="og:url" content="https://splinterhq.github.io/">
-<meta name="twitter:card" content="summary">
-<meta name="description" content="Splinter is a passive, lock-free shared memory substrate for high-frequency vector and KV ingestion across disjointed runtimes. No daemon. No socket tax.…">
-<meta name="keywords" content="Lock-Free IPC, Shared Memory Vector Store, Zero-Copy Embeddings, LLM Semantic Memory, Inter-Process Communication, libsplinter">
-<meta name="robots" content="index, follow">
-<meta name="generator" content="Lume 3.2.1">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Splinter Documentation">
-<meta property="og:locale" content="en">
-<meta property="og:title" content="Splinter — L3-Speed Shared Memory IPC">
-<meta property="og:description" content="Splinter is a passive, lock-free shared memory substrate for high-frequency vector and KV ingestion across disjointed runtimes. No daemon. No socket tax.…">
-<meta property="og:url" content="https://splinterhq.github.io/">
-<meta name="twitter:card" content="summary">
-<meta name="description" content="Splinter is a passive, lock-free shared memory substrate for high-frequency vector and KV ingestion across disjointed runtimes. No daemon. No socket tax.…">
-<meta name="keywords" content="Lock-Free IPC, Shared Memory Vector Store, Zero-Copy Embeddings, LLM Semantic Memory, Inter-Process Communication, libsplinter">
-<meta name="robots" content="index, follow">
-<meta name="generator" content="Lume 3.2.1">
-<link rel="icon" sizes="32x32" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" sizes="any" href="/uploads/favicon.svg" type="image/svg+xml">
-</head>
-<body>
+
+
 
 <div class="scanline"></div>
 
 <nav class="spl-nav">
-  <a href="." class="spl-logo">SPLINTER<span>⚡</span></a>
+  <a href="../.." class="spl-logo">SPLINTER<span>⚡</span></a>
   <div class="spl-nav-links">
-    <a href="core">core api</a>
-    <a href="bindings">ffi</a>
-    <a href="cli">cli</a>
-    <a href="use_cases">use cases</a>
+    <a href="../../core">core api</a>
+    <a href="../../bindings">ffi</a>
+    <a href="../../cli">cli</a>
+    <a href="../../use_cases">use cases</a>
     <a href="https://github.com/splinterhq/libsplinter" class="gh">github</a>
   </div>
 </nav>
@@ -250,7 +853,7 @@
   <h1>The bus that<br><em>never speaks</em><br>unless spoken to.</h1>
   <p class="spl-hero-sub">Splinter is a passive, lock-free shared memory substrate for high-frequency vector and KV ingestion across disjointed runtimes. No daemon. No socket tax. No memcpy.</p>
   <div class="spl-cta-row">
-    <a href="installing" class="spl-cta-primary">get started</a>
+    <a href="../../installing" class="spl-cta-primary">get started</a>
     <a href="https://github.com/splinterhq/libsplinter" class="spl-cta-secondary">view on github →</a>
   </div>
 </section>
@@ -439,5 +1042,20 @@ function splShowLang(el, lang) {
 </script>
 
 
+
+
+        </article>
+      </section>
+    </div>
+  </main>
+  <footer class="container-fluid">
+    <div class="container">
+      <div class="grid">
+    <p>Built with <a href="https://lume.land/">Lume</a>, <a href="https://lumocs.56k.guru/">LumoCS</a>, ☕ and ❤️.</p>
+    <span class="right notice">
+    Using Splinter In Prod? You can <a href="https://buymeacoffee.com/timthepost">buy Tim a coffee</a> if you're getting real value from it.</span>
+</div>
+    </div>
+  </footer>
 
 </body></html>
