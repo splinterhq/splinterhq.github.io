@@ -1,5 +1,5 @@
 
-Sitemap: https://splinterhq.github.io/sitemap.xml
+Sitemap: http://localhost:3000/sitemap.xml
 User-agent: *
 Allow: /
 

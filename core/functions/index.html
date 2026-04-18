@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
 
-    <link rel="canonical" href="https://splinterhq.github.io/core/functions/">
+    <link rel="canonical" href="http://localhost:3000/core/functions/">
 
     <title>Splinter Documentation - Function Reference</title>
  
@@ -48,7 +48,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Function Reference">
 <meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta property="og:url" content="https://splinterhq.github.io/core/functions/">
+<meta property="og:url" content="http://localhost:3000/core/functions/">
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
@@ -59,7 +59,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Function Reference">
 <meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta property="og:url" content="https://splinterhq.github.io/core/functions/">
+<meta property="og:url" content="http://localhost:3000/core/functions/">
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
@@ -128,42 +128,6 @@
                         
                         
                         <a href="../..">Splinter — L3-Speed Shared Memory IPC</a>
-
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    
-                    
-                    
-
-                    <li class="level0 bold collapsed ">
-
-                        
-                        
-                        <a href="../../temp/splinter-home"></a>
-
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    
-                    
-                    
-
-                    <li class="level0 bold collapsed ">
-
-                        
-                        
-                        <a href="../../temp">Splinter — L3-Speed Shared Memory IPC</a>
 
                         
                     </li>
@@ -550,14 +514,6 @@
 
     
     
-    
-
-    
-    
-    
-
-    
-    
         
         
         
@@ -655,12 +611,8 @@ you remove things from the structures, double-check their byte-alignment as
 staying 64 (this should be automatic thanks to macros, but a unit test will fail
 if not). Just note that changing structures means needing to update everything
 else.</p>
-<h2 id="method-documentation-coming-soon" tabindex="-1"><a href="#method-documentation-coming-soon" class="header-anchor">Method Documentation Coming Soon</a></h2>
-<p>I'm working on automating web docs from the Doxygen code docs (which are the
-only docs for the core library and CLI code right now). These will include
-rationale, where its used in the included tools, future directions and
-example usage.</p>
-<p>Until then, please just refer to the inline Doxygen comments.</p>
+<p>The <a href="https://github.com/splinterhq/libsplinter/blob/main/splinter.h">public header is heavily commented</a>
+with Doxygen comments, <strong>as well as LLM instructions and confidence thresholds</strong>.</p>
 <h2 id="build-configuration-matters" tabindex="-1"><a href="#build-configuration-matters" class="header-anchor">Build Configuration Matters</a></h2>
 <p>Some functions are not enabled unless Splinter is compiled with support for
 embeddings, or support for Numa-pinning. However, we present them all and only

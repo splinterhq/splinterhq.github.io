@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
 
-    <link rel="canonical" href="https://splinterhq.github.io/cli/">
+    <link rel="canonical" href="http://localhost:3000/cli/">
 
     <title>Splinter Documentation - Command Line Interfaces</title>
  
@@ -48,7 +48,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Command Line Interfaces">
 <meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta property="og:url" content="https://splinterhq.github.io/cli/">
+<meta property="og:url" content="http://localhost:3000/cli/">
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
@@ -59,7 +59,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Command Line Interfaces">
 <meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta property="og:url" content="https://splinterhq.github.io/cli/">
+<meta property="og:url" content="http://localhost:3000/cli/">
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
@@ -128,42 +128,6 @@
                         
                         
                         <a href="..">Splinter — L3-Speed Shared Memory IPC</a>
-
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    
-                    
-                    
-
-                    <li class="level0 bold collapsed ">
-
-                        
-                        
-                        <a href="../temp/splinter-home"></a>
-
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    
-                    
-                    
-
-                    <li class="level0 bold collapsed ">
-
-                        
-                        
-                        <a href="../temp">Splinter — L3-Speed Shared Memory IPC</a>
 
                         
                     </li>
@@ -548,14 +512,6 @@
 
     
     
-    
-
-    
-    
-    
-
-    
-    
         
         
         
@@ -652,8 +608,8 @@ same physical network.</p>
 <ol class="toc"><li><a href="#command-help-vs-tool-help">Command Help Vs Tool Help</a></li><li><a href="#environmental-variables">Environmental Variables</a></li><li><a href="#files">Files</a></li><li><a href="#splinterctl-special-invocation">splinterctl Special Invocation</a><ul><li><a href="#example---splinter_cli-vs-splinterctl%3A">Example - splinter_cli vs splinterctl:</a></li></ul></li></ol>
 <h2 id="command-help-vs-tool-help" tabindex="-1"><a href="#command-help-vs-tool-help" class="header-anchor">Command Help Vs Tool Help</a></h2>
 <p>There are commands <code>splinter_cli</code> understands how to run, which are:</p>
-<pre><code class="language-sh hljs language-bash"> Module     | Description                                                 
------------------------------------------------------------------
+<pre><code class="language-bash hljs">Module     | Description                                                 
+--------------------------------------------------------------------------------
  clear      | Clears the screen.                                          
  cls        | Alias of <span class="hljs-string">'clear'</span>                                            
  config     | Access Splinter bus and slot metadata.                      
@@ -671,9 +627,15 @@ same physical network.</p>
  <span class="hljs-built_in">type</span>       | Display or <span class="hljs-built_in">set</span> the named slot <span class="hljs-built_in">type</span> <span class="hljs-keyword">for</span> a key.               
  math       | Perform incr/decr and bitwise ops on named biguint keys.    
  label      | Label a key with bits <span class="hljs-keyword">for</span> its bloom filter                  
+ orders     | Manage standard vector orders of a key                      
+ <span class="hljs-built_in">bind</span>       | Bind bloom labels to signal arena <span class="hljs-built_in">groups</span>                    
+ bump       | Bump a slot<span class="hljs-string">'s epoch without doing any other work            
+ append     | Append a value to an existing key (do not truncate prior to writing)
+ uuid       | Generate a UUID v4 unique identifier                        
+ search     | Search embedded keys by semantic similarity.                
+ wasm       | Run WASM via WASMEdge                                       
  lua        | Run a lua script                                            
- orders     | Manage standard vector orders of a key
-</code></pre>
+</span></code></pre>
 <p>There's also a way in which <code>splinterctl</code> / <code>splinter_cli</code> should <em>be</em> run,
 which you can get by passing <code>--help</code> to either:</p>
 <pre><code class="language-sh hljs language-bash">Usage:  splinterctl [options] [arguments] *or*

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
 
-    <link rel="canonical" href="https://splinterhq.github.io/core/structures/">
+    <link rel="canonical" href="http://localhost:3000/core/structures/">
 
     <title>Splinter Documentation - Structures &amp; Types</title>
  
@@ -48,7 +48,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Structures &amp; Types">
 <meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta property="og:url" content="https://splinterhq.github.io/core/structures/">
+<meta property="og:url" content="http://localhost:3000/core/structures/">
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
@@ -59,7 +59,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Structures &amp; Types">
 <meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta property="og:url" content="https://splinterhq.github.io/core/structures/">
+<meta property="og:url" content="http://localhost:3000/core/structures/">
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
@@ -128,42 +128,6 @@
                         
                         
                         <a href="../..">Splinter — L3-Speed Shared Memory IPC</a>
-
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    
-                    
-                    
-
-                    <li class="level0 bold collapsed ">
-
-                        
-                        
-                        <a href="../../temp/splinter-home"></a>
-
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    
-                    
-                    
-
-                    <li class="level0 bold collapsed ">
-
-                        
-                        
-                        <a href="../../temp">Splinter — L3-Speed Shared Memory IPC</a>
 
                         
                     </li>
@@ -550,14 +514,6 @@
 
     
     
-    
-
-    
-    
-    
-
-    
-    
         
         
         
@@ -650,128 +606,8 @@ this is a non-issue, of course! However, many people don't realize the tools
 that ship with splinter expect these structures to be as they are; if you intend
 to keep in step with the tool development, it's recommended that you do not
 modify these.</p>
-<ol class="toc"><li><a href="#struct-splinter_header">struct splinter_header</a></li><li><a href="#struct-splinter_slot">struct splinter_slot</a></li><li><a href="#struct-splinter_header_snapshot">struct splinter_header_snapshot</a></li><li><a href="#struct-splinter_slot_snapshot">struct splinter_slot_snapshot</a></li></ol>
-<h2 id="struct-splinter_header" tabindex="-1"><a href="#struct-splinter_header" class="header-anchor"><code>struct splinter_header</code></a></h2>
-<p>This is the "global" Splinter header that contains all of the metadata around
-the upkeep and state of the store.</p>
-<pre><code class="language-c hljs"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">splinter_header</span> {</span>
-    <span class="hljs-comment">/** @brief Magic number (SPLINTER_MAGIC) to verify integrity. */</span>
-    <span class="hljs-type">uint32_t</span> magic;
-    <span class="hljs-comment">/** @brief Data layout version (SPLINTER_VER). */</span>
-    <span class="hljs-type">uint32_t</span> version;
-    <span class="hljs-comment">/** @brief Total number of available key-value slots. */</span>
-    <span class="hljs-type">uint32_t</span> slots;
-    <span class="hljs-comment">/** @brief Maximum size for any single value. */</span>
-    <span class="hljs-type">uint32_t</span> max_val_sz;
-    <span class="hljs-comment">/** @brief Global epoch, incremented on any write. Used for change detection. */</span>
-    <span class="hljs-type">atomic_uint_least64_t</span> epoch;
-    <span class="hljs-comment">/** @brief Core feature flags  */</span>
-    <span class="hljs-type">atomic_uint_least8_t</span> core_flags;
-    <span class="hljs-comment">/** @brief User-defined feature flags */</span>
-    <span class="hljs-type">atomic_uint_least8_t</span> user_flags;
-    <span class="hljs-comment">/** @brief Track the next-available value region */</span>
-    <span class="hljs-type">atomic_uint_least32_t</span> val_brk;
-    <span class="hljs-comment">/** @brief Running total size of the arena */</span>
-    <span class="hljs-type">uint32_t</span> val_sz;
-    <span class="hljs-comment">/** @brief Memory alignment (e.g  64) */</span>
-    <span class="hljs-type">uint32_t</span> alignment;
-
-    <span class="hljs-comment">/* Diagnostics: counts of parse failures reported by clients / harnesses */</span>
-    <span class="hljs-type">atomic_uint_least64_t</span> parse_failures;
-    <span class="hljs-type">atomic_uint_least64_t</span> last_failure_epoch;
-
-    <span class="hljs-comment">// Maps each of the 64 bloom bits to a specific Signal Group (0-63)</span>
-    <span class="hljs-comment">// 0xFF indicates no watch for that bit.</span>
-    <span class="hljs-type">atomic_uint_least8_t</span> bloom_watches[<span class="hljs-number">64</span>];
-
-    <span class="hljs-comment">// The Signal Arena for epoll-backed notifications</span>
-    <span class="hljs-keyword">alignas</span>(<span class="hljs-number">64</span>) <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">splinter_signal_node</span> <span class="hljs-title">signal_groups</span>[<span class="hljs-title">SPLINTER_MAX_GROUPS</span>];</span>
-};
-</code></pre>
-<h2 id="struct-splinter_slot" tabindex="-1"><a href="#struct-splinter_slot" class="header-anchor"><code>struct splinter_slot</code></a></h2>
-<p>The main mechanical mechanism behind Splinter. This stores the slot key, value
-arena length + starting offset, bloom bits, feature flats and some low-level
-configuration options.</p>
-<p>Each slot has its own epoch for sequence locking and update notifications.</p>
-<pre><code class="language-c hljs"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">splinter_slot</span> {</span>
-    <span class="hljs-comment">/** @brief The FNV-1a hash of the key. 0 indicates an empty slot. */</span>
-    <span class="hljs-keyword">alignas</span>(<span class="hljs-number">64</span>) <span class="hljs-type">atomic_uint_least64_t</span> hash;
-    <span class="hljs-comment">/** @brief Per-slot epoch, incremented on write to this slot. Used for polling. */</span>
-    <span class="hljs-type">atomic_uint_least64_t</span> epoch;
-    <span class="hljs-comment">/** @brief Offset into the VALUES region where the value data is stored. */</span>
-    <span class="hljs-type">uint32_t</span> val_off;
-    <span class="hljs-comment">/** @brief The actual length of the stored value data (atomic). */</span>
-    <span class="hljs-type">atomic_uint_least32_t</span> val_len;
-    <span class="hljs-comment">/** @brief The type-naming flags for slot typing */</span>
-    <span class="hljs-type">atomic_uint_least8_t</span> type_flag;
-    <span class="hljs-comment">/** @brief The user-defined flags for slot features */</span>
-    <span class="hljs-type">atomic_uint_least8_t</span> user_flag;
-    <span class="hljs-comment">/** @brief Watcher signal group for multi-watching */</span>
-    <span class="hljs-type">atomic_uint_least64_t</span> watcher_mask;
-    <span class="hljs-comment">/** @brief The time a slot was created (optional; must be set by the client) */</span>
-    <span class="hljs-type">atomic_uint_least64_t</span> ctime;
-    <span class="hljs-comment">/** @brief The last time the slot was meaningfully accessed (optional; must be set by the client) */</span>
-    <span class="hljs-type">atomic_uint_least64_t</span> atime;
-    <span class="hljs-comment">/** @brief The 64-bit Bloom filter / Label mask */</span>
-    <span class="hljs-type">atomic_uint_least64_t</span> bloom;
-    <span class="hljs-comment">/** @brief The null-terminated key string. */</span>
-    <span class="hljs-type">char</span> key[SPLINTER_KEY_MAX];
-<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> SPLINTER_EMBEDDINGS</span>
-    <span class="hljs-type">float</span> embedding[SPLINTER_EMBED_DIM];
-<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
-};
-</code></pre>
-<h2 id="struct-splinter_header_snapshot" tabindex="-1"><a href="#struct-splinter_header_snapshot" class="header-anchor"><code>struct splinter_header_snapshot</code></a></h2>
-<p>This is the non-atomic version of <code>struct splinter_header</code>, which is used to
-receive a copy of the atomic one (similar to <code>ioctl()</code>).</p>
-<pre><code class="language-c hljs"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">splinter_header_snapshot</span> {</span>
-    <span class="hljs-comment">/** @brief Magic number (SPLINTER_MAGIC) to verify integrity. */</span>
-    <span class="hljs-type">uint32_t</span> magic;
-    <span class="hljs-comment">/** @brief Data layout version (SPLINTER_VER). */</span>
-    <span class="hljs-type">uint32_t</span> version;
-    <span class="hljs-comment">/** @brief Total number of available key-value slots. */</span>
-    <span class="hljs-type">uint32_t</span> slots;
-    <span class="hljs-comment">/** @brief Maximum size for any single value. */</span>
-    <span class="hljs-type">uint32_t</span> max_val_sz;
-    <span class="hljs-comment">/** @brief Global epoch, incremented on any write. Used for change detection. */</span>
-    <span class="hljs-type">uint64_t</span> epoch;
-    <span class="hljs-comment">/** @Brief holds the slot type flags */</span>
-    <span class="hljs-type">uint8_t</span> core_flags;
-    <span class="hljs-comment">/** @Brief holds the slot user flags */</span>
-    <span class="hljs-type">uint8_t</span> user_flags;
-
-    <span class="hljs-comment">/* Diagnostics: counts of parse failures reported by clients / harnesses */</span>
-    <span class="hljs-type">uint64_t</span> parse_failures;
-    <span class="hljs-type">uint64_t</span> last_failure_epoch;
-} <span class="hljs-type">splinter_header_snapshot_t</span>;
-</code></pre>
-<h2 id="struct-splinter_slot_snapshot" tabindex="-1"><a href="#struct-splinter_slot_snapshot" class="header-anchor"><code>struct splinter_slot_snapshot</code></a></h2>
-<p>This is the non-atomic version of <code>struct splinter_snapshot</code>, which is used to
-receive a copy of the atomic one (similar to <code>splinter_header_snapshot</code>).</p>
-<pre><code class="language-c hljs"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">splinter_slot_snapshot</span> {</span>
-    <span class="hljs-comment">/** @brief The FNV-1a hash of the key. 0 indicates an empty slot. */</span>
-    <span class="hljs-type">uint64_t</span> hash;
-    <span class="hljs-comment">/** @brief Per-slot epoch, incremented on write to this slot. Used for polling. */</span>
-    <span class="hljs-type">uint64_t</span> epoch;
-    <span class="hljs-comment">/** @brief Offset into the VALUES region where the value data is stored. */</span>
-    <span class="hljs-type">uint32_t</span> val_off;
-    <span class="hljs-comment">/** @brief The actual length of the stored value data (atomic). */</span>
-    <span class="hljs-type">uint32_t</span> val_len;
-    <span class="hljs-comment">/** @brief The slot type flags */</span>
-    <span class="hljs-type">uint8_t</span> type_flag;
-    <span class="hljs-comment">/** @brief The slot user flags */</span>
-    <span class="hljs-type">uint8_t</span> user_flag;
-    <span class="hljs-comment">/** @brief Storage for creation time */</span>
-    <span class="hljs-type">uint64_t</span> ctime;
-    <span class="hljs-comment">/** @brief Storage for access time */</span>
-    <span class="hljs-type">uint64_t</span> atime;
-    <span class="hljs-comment">/** @brief The null-terminated key string. */</span>
-    <span class="hljs-type">char</span> key[SPLINTER_KEY_MAX];
-<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> SPLINTER_EMBEDDINGS</span>
-    <span class="hljs-type">float</span> embedding[SPLINTER_EMBED_DIM];
-<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
-} <span class="hljs-type">splinter_slot_snapshot_t</span>;
-</code></pre>
+<p>See the <a href="https://github.com/splinterhq/libsplinter/blob/main/splinter.h">inline documentation</a> on Github for now.</p>
+<p>When Splinter releases <code>1.2.0</code> I'll make web docs, once things have settled.</p>
 
         </article>
       </section>

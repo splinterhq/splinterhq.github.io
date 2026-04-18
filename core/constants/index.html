@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
 
-    <link rel="canonical" href="https://splinterhq.github.io/core/constants/">
+    <link rel="canonical" href="http://localhost:3000/core/constants/">
 
     <title>Splinter Documentation - Constants &amp; Bits</title>
  
@@ -48,7 +48,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Constants &amp; Bits">
 <meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta property="og:url" content="https://splinterhq.github.io/core/constants/">
+<meta property="og:url" content="http://localhost:3000/core/constants/">
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
@@ -59,7 +59,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:title" content="Constants &amp; Bits">
 <meta property="og:description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
-<meta property="og:url" content="https://splinterhq.github.io/core/constants/">
+<meta property="og:url" content="http://localhost:3000/core/constants/">
 <meta name="twitter:card" content="summary">
 <meta name="description" content="Splinter is a minimalist, lock-free key-value manifold designed for high-frequency data ingestion and retrieval across disjointed runtimes using IPC.">
 <meta name="keywords" content="Vector Anti-Database, Shared-Memory Substrate, Lock-Free IPC, LLM Semantic Memory, Inter-Process Communication">
@@ -128,42 +128,6 @@
                         
                         
                         <a href="../..">Splinter — L3-Speed Shared Memory IPC</a>
-
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    
-                    
-                    
-
-                    <li class="level0 bold collapsed ">
-
-                        
-                        
-                        <a href="../../temp/splinter-home"></a>
-
-                        
-                    </li>
-                
-
-                    
-                    
-                    
-
-                    
-                    
-                    
-
-                    <li class="level0 bold collapsed ">
-
-                        
-                        
-                        <a href="../../temp">Splinter — L3-Speed Shared Memory IPC</a>
 
                         
                     </li>
@@ -550,14 +514,6 @@
 
     
     
-    
-
-    
-    
-    
-
-    
-    
         
         
         
@@ -638,104 +594,8 @@
         </header>
         <article>
           <h1>Constants &amp; Placeholder Bits</h1>
-<p>Splinter has quite a few features, so there are quite a few constants
-representing bitmask flags to activate them.</p>
-<h2 id="splinter's-magic-number" tabindex="-1"><a href="#splinter's-magic-number" class="header-anchor">Splinter's Magic Number</a></h2>
-<p>This is used to determine if the structure being read is a Splinter header very
-quickly.</p>
-<p>It also has some philosophical significance, bytes <code>53 4C 4E 54</code> convert to
-ASCII <code>S L N T</code>. Splinter's original tagline was "<em>The bus that never speaks
-unless spoken to</em>", owning to the noise-less design when idle:</p>
-<pre><code class="language-c hljs"><span class="hljs-meta">#<span class="hljs-keyword">define</span> SPLINTER_MAGIC 0x534C4E54</span>
-</code></pre>
-<h2 id="global-config-constants%3A" tabindex="-1"><a href="#global-config-constants%3A" class="header-anchor">Global Config Constants:</a></h2>
-<p>The following are necessary, but don't bucket well into groups:</p>
-<pre><code class="language-c hljs"><span class="hljs-comment">/** @brief Version of the splinter data format (not the library version). */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPLINTER_VER 2</span>
-<span class="hljs-comment">/** @brief Maximum length of a key string, including null terminator. */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPLINTER_KEY_MAX 64</span>
-<span class="hljs-comment">/** @brief Nanoseconds per millisecond for time calculations. */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> NS_PER_MS 1000000ULL</span>
-<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> SPLINTER_EMBEDDINGS</span>
-<span class="hljs-comment">/** @brief The number of dimensions Splinter should support (OpenAI style is 768) */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPLINTER_EMBED_DIM 768</span>
-<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
-
-<span class="hljs-comment">/** @brief The maximum number of watch signal groups for a slot */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPLINTER_MAX_GROUPS 64</span>
-</code></pre>
-<p>Note that <code>SPLINTER_MAX_GROUPS</code> correlates to per-slot bloom length.</p>
-<h2 id="reserved-global-(store)-flags%3A" tabindex="-1"><a href="#reserved-global-(store)-flags%3A" class="header-anchor">Reserved Global (Store) Flags:</a></h2>
-<p>These directly correlate to <code>atomic_uint_least8_t core_flags</code> in
-<code>struct splinter_header</code>:</p>
-<pre><code class="language-c hljs"><span class="hljs-comment">/** @brief Reserved store system flags */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SYS_AUTO_SCRUB     (1u &lt;&lt; 0)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SYS_HYBRID_SCRUB   (1u &lt;&lt; 1)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SYS_RESERVED_2     (1u &lt;&lt; 2)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SYS_RESERVED_3     (1u &lt;&lt; 3)</span>
-</code></pre>
-<h2 id="user-aliasable-global-(store)-flags" tabindex="-1"><a href="#user-aliasable-global-(store)-flags" class="header-anchor">User-Aliasable Global (Store) Flags</a></h2>
-<p>These can be used for whatever you want, and directly correlate to
-<code>atomic_uint_least8_t user_flags</code> in <code>struct splinter_header</code>.</p>
-<pre><code class="language-c hljs"><span class="hljs-comment">/** @brief User store flags for aliasing */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SUSR1              (1u &lt;&lt; 4)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SUSR2              (1u &lt;&lt; 5)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SUSR3              (1u &lt;&lt; 6)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SUSR4              (1u &lt;&lt; 7)</span>
-</code></pre>
-<h2 id="named-type-slot-configuration-flags" tabindex="-1"><a href="#named-type-slot-configuration-flags" class="header-anchor">Named-type Slot Configuration Flags</a></h2>
-<p>These help declare what kind of data is expected to be in a slot:</p>
-<pre><code class="language-c hljs"><span class="hljs-comment">/** @brief Named type flags */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_TYPE_VOID     (1u &lt;&lt; 0)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_TYPE_BIGINT   (1u &lt;&lt; 1)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_TYPE_BIGUINT  (1u &lt;&lt; 2)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_TYPE_JSON     (1u &lt;&lt; 3)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_TYPE_BINARY   (1u &lt;&lt; 4)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_TYPE_IMGDATA  (1u &lt;&lt; 5)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_TYPE_AUDIO    (1u &lt;&lt; 6)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_TYPE_VARTEXT  (1u &lt;&lt; 7)</span>
-</code></pre>
-<p>Upon transformation to BIGUINT, bit-depth is automatically expanded by the
-library. The rest are just handy tags.</p>
-<p>There is a default:</p>
-<pre><code class="language-c hljs"><span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_SLOT_DEFAULT_TYPE SPL_SLOT_TYPE_VOID</span>
-</code></pre>
-<h2 id="per-slot-feature-flags-for-user-aliasing%3A" tabindex="-1"><a href="#per-slot-feature-flags-for-user-aliasing%3A" class="header-anchor">Per-Slot Feature Flags For User-Aliasing:</a></h2>
-<p>These correlate directly with each slot's <code>atomic_uint_least8_t user_flag</code> and
-you can set your own constants to them (or just use the same bitmasks):</p>
-<pre><code class="language-c hljs"><span class="hljs-comment">/** @brief Per-slot user flags for aliasing */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_FUSR1              (1u &lt;&lt; 0)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_FUSR2              (1u &lt;&lt; 1)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_FUSR3              (1u &lt;&lt; 2)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_FUSR4              (1u &lt;&lt; 3)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_FUSR5              (1u &lt;&lt; 4)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_FUSR6              (1u &lt;&lt; 5)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_FUSR7              (1u &lt;&lt; 6)</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_FUSR8              (1u &lt;&lt; 7)</span>
-</code></pre>
-<h2 id="temporal-operation-flags" tabindex="-1"><a href="#temporal-operation-flags" class="header-anchor">Temporal Operation Flags</a></h2>
-<p>When doing a time-op (with or without lag) the client library needs to know if
-you want to set <code>ctime</code> OR <code>atime</code> (pick one for each call).</p>
-<pre><code class="language-c hljs"><span class="hljs-comment">/** @brief Modes for invoking slot timestamp updates */</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_TIME_CTIME         0</span>
-<span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_TIME_ATIME         1</span>
-</code></pre>
-<p>If <code>MTIME</code> is ever added, this will become an enum.</p>
-<h2 id="scientific-order-separator" tabindex="-1"><a href="#scientific-order-separator" class="header-anchor">Scientific Order Separator</a></h2>
-<p>Splinter's tandem slots let you create, map and store vectors for multiple
-orders of the same value or variable. Let's say you have a key named <code>car</code>, and
-you needed to store semantic vectors about the car, but directional vectors
-about its speed and acceleration.</p>
-<p>You could create a 3-pair tandem key where these would be accessible as <code>car</code>,
-<code>car.1</code> (velocity), and <code>car.2</code> (acceleration), or even <code>car.3</code> for jerk, with
-each key being functional as independent, but paired together as a standard
-order by the library.</p>
-<p>Sometimes you have to pick something that will <em>not</em> naturally appear in your
-key space, which rules <code>.</code> out quickly. In this case any UTF-8 character like 💩
-or even more esoteric works just fine. And it makes analysis a little less
-boring <code>:)</code></p>
-<pre><code class="language-c hljs"><span class="hljs-meta">#<span class="hljs-keyword">define</span> SPL_ORDER_ACCESSOR <span class="hljs-string">"."</span></span>
-</code></pre>
+<p>See the <a href="https://github.com/splinterhq/libsplinter/blob/main/splinter.h">inline documentation</a> on Github for now.</p>
+<p>When Splinter releases <code>1.2.0</code> I'll make web docs, once things have settled.</p>
 
         </article>
       </section>
