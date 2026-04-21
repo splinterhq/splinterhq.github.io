@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:3000/</loc>
+    <loc>https://splinterhq.github.io/</loc>
     <lastmod>2026-03-11T17:36:31.104Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/bindings/</loc>
+    <loc>https://splinterhq.github.io/bindings/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/bindings/java/</loc>
+    <loc>https://splinterhq.github.io/bindings/java/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/bindings/lua/</loc>
+    <loc>https://splinterhq.github.io/bindings/lua/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/bindings/python/</loc>
+    <loc>https://splinterhq.github.io/bindings/python/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/bindings/rust/</loc>
+    <loc>https://splinterhq.github.io/bindings/rust/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/bindings/shell/</loc>
+    <loc>https://splinterhq.github.io/bindings/shell/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/bindings/typescript/</loc>
+    <loc>https://splinterhq.github.io/bindings/typescript/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/cli/</loc>
+    <loc>https://splinterhq.github.io/cli/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/core/</loc>
+    <loc>https://splinterhq.github.io/core/</loc>
     <lastmod>2026-03-11T17:36:31.118Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/core/constants/</loc>
+    <loc>https://splinterhq.github.io/core/constants/</loc>
     <lastmod>2026-03-11T17:36:31.121Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/core/examples/</loc>
+    <loc>https://splinterhq.github.io/core/examples/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/core/functions/</loc>
+    <loc>https://splinterhq.github.io/core/functions/</loc>
     <lastmod>2026-03-11T17:36:31.118Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/core/structures/</loc>
+    <loc>https://splinterhq.github.io/core/structures/</loc>
     <lastmod>2026-03-11T17:36:31.121Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/installing/</loc>
+    <loc>https://splinterhq.github.io/installing/</loc>
     <lastmod>2026-03-11T21:27:13.270Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/shards/</loc>
+    <loc>https://splinterhq.github.io/shards/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/splinter-and-linux/</loc>
+    <loc>https://splinterhq.github.io/splinter-and-linux/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/splinter-performance/</loc>
+    <loc>https://splinterhq.github.io/splinter-performance/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/tests/</loc>
+    <loc>https://splinterhq.github.io/tests/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
   <url>
-    <loc>http://localhost:3000/use-cases/</loc>
+    <loc>https://splinterhq.github.io/use-cases/</loc>
     <lastmod>2026-03-11T17:36:31.122Z</lastmod>
   </url>
 </urlset>
