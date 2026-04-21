@@ -610,7 +610,7 @@ same physical network.</p>
 <ol class="toc"><li><a href="#command-help-vs-tool-help">Command Help Vs Tool Help</a></li><li><a href="#environmental-variables">Environmental Variables</a></li><li><a href="#files">Files</a></li><li><a href="#splinterctl-special-invocation">splinterctl Special Invocation</a><ul><li><a href="#example---splinter_cli-vs-splinterctl%3A">Example - splinter_cli vs splinterctl:</a></li></ul></li></ol>
 <h2 id="command-help-vs-tool-help" tabindex="-1"><a href="#command-help-vs-tool-help" class="header-anchor">Command Help Vs Tool Help</a></h2>
 <p>There are commands <code>splinter_cli</code> understands how to run, which are:</p>
-<pre><code class="language-bash hljs">Module     | Description                                                 
+<pre><code class="language-bash hljs"> Module     | Description                                                 
 --------------------------------------------------------------------------------
  clear      | Clears the screen.                                          
  cls        | Alias of <span class="hljs-string">'clear'</span>                                            
@@ -634,9 +634,11 @@ same physical network.</p>
  bump       | Bump a slot<span class="hljs-string">'s epoch without doing any other work            
  append     | Append a value to an existing key (do not truncate prior to writing)
  uuid       | Generate a UUID v4 unique identifier                        
- search     | Search embedded keys by semantic similarity.                
+ caps       | Print version, build, and compiled-in feature flags       
+ search     | Search embedded keys by semantic similarity                
+ ingest     | Ingest a file or stdin as chunked tandem slots for splinference
  wasm       | Run WASM via WASMEdge                                       
- lua        | Run a lua script                                            
+ lua        | Run a lua script                                   
 </span></code></pre>
 <p>There's also a way in which <code>splinterctl</code> / <code>splinter_cli</code> should <em>be</em> run,
 which you can get by passing <code>--help</code> to either:</p>
