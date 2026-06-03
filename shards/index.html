@@ -85,7 +85,7 @@ point <code>splinterctl</code> or <code>splinter_cli</code> at the <code>.so</co
 conforms to a symbol map, loads it.</p>
 <p>This gives you access to Splinter with all the CLI structure and whatever else
 you want to bring in, without having to modify Splinter or the tools.</p>
-<h2 id="the-solution%3A-loadable-shards-(a-type-punned-derivative-of-a-%22splinter%22-%F0%9F%A4%93)" tabindex="-1"><a href="#the-solution%3A-loadable-shards-(a-type-punned-derivative-of-a-%22splinter%22-%F0%9F%A4%93)" class="header-anchor">The Solution: Loadable Shards (a type-punned derivative of a "splinter" 🤓)</a></h2>
+<h2 id="the-solution%3A-loadable-shards-(a-type-punned-derivative-of-a-%22splinter%22)" tabindex="-1"><a href="#the-solution%3A-loadable-shards-(a-type-punned-derivative-of-a-%22splinter%22)" class="header-anchor">The Solution: Loadable Shards (a type-punned derivative of a "splinter")</a></h2>
 <p>Design constraints prevent making the CLI's module list dynamic; some platforms
 disallow heap allocation entirely so Splinter tries hard to not require it for
 anything essential, even in tooling.</p>
@@ -94,41 +94,147 @@ and enter these 'shards' for the user. As long as they contain the correct entry
 points and metadata, they can be compiled anywhere <code>splinter.h</code> can be found.
 This <code>splinter_shard_t</code> will be the only coupling of tooling to the core store
 (found in the core header, not CLI).</p>
-<h2 id="progress%3A-figured-out-mostly-and-coming-soon!" tabindex="-1"><a href="#progress%3A-figured-out-mostly-and-coming-soon!" class="header-anchor">Progress: Figured Out Mostly and Coming Soon!</a></h2>
-<p>Implementation requires a little juggling of what the CLI currently understands
-a use session to look like as far as different users loading different shards
-that have the same topological access to the same store.</p>
-<p>There's some memory expectation setting and accounting to tackle as shards load
-and prepare workloads that might compete with each other, or send the kernel
-conflicting signals when it comes to the same region of memory.</p>
-<p>I'm going to add store level accounting bits so that shards cooperatively
-schedule themselves based on how they need to use memory for how long and at
-what scheduling priority. This election determines what shards run when, and
-what is ultimately communicated to the kernel via <code>posix_madvise()</code>.</p>
-<p>Shards will use a <code>splinter_madvise()</code> that votes in the election, and can
-optionally block instead of voluntarily yielding, depending on what kind of API
-is being called.</p>
-<p><strong>Put plainly:</strong> The kernel can't be put in a state where it has to constantly
-re-evaluate its page cache strategy for the same region just because a cron job
-was ill-conceived, but we need "quick and sometimes dirty load-ables" for
-experiments or production inference loads. Shards are a great compromise answer.</p>
-<p>The shape of the helpers / macros is still wildly kinetic, but functionality and
-design have been mostly finalized. CPU use intent is also being factored in.</p>
-<p>Shards are expected to 'land' sometime in March 2026.</p>
-<h2 id="what-can-we-*do*-with-them%2C-though%3F!" tabindex="-1"><a href="#what-can-we-*do*-with-them%2C-though%3F!" class="header-anchor">What Can We *DO* With Them, Though?!</a></h2>
-<p>Practical examples would be sidecar analysis, sidecar inference, backfill, a
-shard could even expose the store as a RESTful interface. <code>splinference.cpp</code> is
-an example of running a llama.cpp style inference loop without sockets or moving
-memory around; it would be even more valuable as a loadable object that could be
-run on-demand in the CLI. Shards can service signal groups with whatever you
-need them to do right after your data lands.</p>
-<p>Think what you could do with something like
-<a href="https://github.com/bytedance/sonic">Sonic</a> in a sidecar serializing your data
-asynchronously without socket, mutex or even <code>memcpy()</code> penalty. You can write
-shards in Go, Rust, or any language that compiles down to standard shared
-objects.</p>
-<p>Shards have access to Lua, too <code>:)</code></p>
-<p>Stay tuned!</p>
+<h2 id="splinter-format-v4-(now-shipping)-%E2%80%94-logic-shard-election-%26-voluntary-yield" tabindex="-1"><a href="#splinter-format-v4-(now-shipping)-%E2%80%94-logic-shard-election-%26-voluntary-yield" class="header-anchor">Splinter Format v4 (NOW SHIPPING) — Logic Shard Election &amp; Voluntary Yield</a></h2>
+<p>Format v4 adds the <strong>Logic Shard bid table</strong> to the store header: a fixed,
+32-slot region that lets independently-loaded shards coordinate <em>memory intent</em>
+(<code>posix_madvise</code> advice) cooperatively, with no central arbiter, no syscall on
+the hot path, and no dynamic allocation. This document covers what changed on
+disk, the new public API, and the <code>shard</code> CLI command.</p>
+<h2 id="the-v3-%E2%86%92-v4-format-break" tabindex="-1"><a href="#the-v3-%E2%86%92-v4-format-break" class="header-anchor">The v3 → v4 format break</a></h2>
+<p>The bid table is appended to <code>struct splinter_header</code>, which changes the
+on-shared-memory layout and <code>sizeof(struct splinter_header)</code>. <strong>v4 is not
+backward compatible with v3 stores.</strong></p>
+<ul>
+<li><code>splinter_open()</code> rejects a v3 store cleanly: it checks <code>H-&gt;version</code> against
+<code>SPLINTER_VER</code> and returns <code>-1</code> rather than mis-mapping the older layout.</li>
+<li>There is <strong>no in-place upgrade</strong>. A v3 store must be drained and re-created as
+v4 (the value data is the operator's; Splinter does not migrate it for you).
+In practice: stop the writers, dump anything you need with <code>splinter export</code>,
+<code>make distclean</code> / <code>rm</code> the old shm object, re-<code>init</code>, and re-ingest.</li>
+<li>All field offsets <em>before</em> the table are undisturbed — the table is the last
+member of the header — but because <code>sizeof(header)</code> grew, the slot array and
+value arena now start at a different absolute offset. That is exactly why the
+version gate exists.</li>
+</ul>
+<p>If <code>splinter_open()</code> starts returning <code>-1</code> on a store that used to open, check
+its version first; a v3 store is the most likely cause.</p>
+<h2 id="what-the-protocol-does" tabindex="-1"><a href="#what-the-protocol-does" class="header-anchor">What the protocol does</a></h2>
+<p>The thesis problem: many processes issuing independent <code>posix_madvise()</code> hints
+for the <em>same</em> region (live inference wanting <code>WILLNEED</code>, a backfill sweep
+wanting <code>SEQUENTIAL</code>, a purge wanting <code>DONTNEED</code>) forces the kernel page-cache
+manager to thrash and destroys L3 residency.</p>
+<p>The fix is <strong>memory-intent coordination only</strong> (CPU scheduling stays with
+Linux/cgroups). Each shard declares a <em>bid</em>; an election picks one <strong>sovereign</strong>
+allowed to issue the current advisement.</p>
+<ul>
+<li><strong>Bid table.</strong> 32 slots (<code>SPLINTER_MAX_SHARDS</code>), each a <code>splinter_shard_bid</code>:
+<code>shard_id</code> (0 = empty), <code>pid</code>, <code>intent</code>, <code>priority</code> (0–255), <code>duration_tsc</code>,
+<code>claimed_at</code>. Claim via CAS on <code>shard_id</code>; release on unload/yield. ~1 KB.</li>
+<li><strong>The election</strong> (<code>splinter_shard_election</code>) is a read-only O(32) scan:
+highest-priority <strong>unexpired</strong> bid wins. A bid is expired when
+<code>splinter_now() − claimed_at &gt; duration_tsc</code>. Ties broken by earliest
+<code>claimed_at</code>, final tie-break <strong>lowest PID</strong>. Every shard computes the same
+sovereign independently from static bid data.</li>
+<li><strong>Voluntary yield</strong> (<code>splinter_madvise</code>) runs the election; if the caller is
+sovereign it issues the advice, else it blocks (eventfd broker when armed,
+else a TSC-polled sleep) until it can win — or defers immediately.</li>
+<li><strong>32-shard ceiling</strong> is deliberate: it matches the seqlock writer ceiling.
+The table is never larger than the concurrency the epoch protocol supports.</li>
+</ul>
+<h3 id="the-dontneed-soft-bumper" tabindex="-1"><a href="#the-dontneed-soft-bumper" class="header-anchor">The <code>DONTNEED</code> soft bumper</a></h3>
+<p><code>DONTNEED</code> is hostile in an active deployment. A <code>DONTNEED</code> bid participates in
+the election normally but <strong>cannot win sovereignty while any unexpired
+<code>WILLNEED</code>/<code>SEQUENTIAL</code> bid exists</strong>, regardless of its priority. It still
+occupies a slot and is visible in audits. This ships on by default. It is a
+<em>safety</em> mechanism, not access control — there is no authentication on the
+table; the OS trust boundary (who can open the bus) is who can bid. Treat
+<code>DONTNEED</code> as maintenance-window-only.</p>
+<hr>
+<h2 id="public-api-(splinter.h)" tabindex="-1"><a href="#public-api-(splinter.h)" class="header-anchor">Public API (<code>splinter.h</code>)</a></h2>
+<p>All functions are <code>extern "C"</code>-safe (the <code>.cpp</code> daemons call them). Return
+convention matches the rest of the library: <code>0</code> success, <code>-1</code>
+recoverable/contested (<code>errno</code> set — <code>EAGAIN</code>/<code>ENOSPC</code>/<code>ETIMEDOUT</code>), <code>-2</code> caller
+error (NULL/invalid arg or no store).</p>
+<pre><code class="language-c hljs"><span class="hljs-type">int</span>      <span class="hljs-title function_">splinter_shard_claim</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> shard_id, <span class="hljs-type">uint8_t</span> intent,
+                              <span class="hljs-type">uint8_t</span> priority, <span class="hljs-type">uint64_t</span> duration_tsc)</span>;
+<span class="hljs-type">int</span>      <span class="hljs-title function_">splinter_shard_claim_ex</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> shard_id, <span class="hljs-type">uint32_t</span> pid, <span class="hljs-type">uint8_t</span> intent,
+                                 <span class="hljs-type">uint8_t</span> priority, <span class="hljs-type">uint64_t</span> duration_tsc,
+                                 <span class="hljs-type">uint64_t</span> claimed_at)</span>;
+<span class="hljs-type">int</span>      <span class="hljs-title function_">splinter_shard_rebid</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> shard_id, <span class="hljs-type">uint8_t</span> intent,
+                              <span class="hljs-type">uint8_t</span> priority, <span class="hljs-type">uint64_t</span> duration_tsc)</span>;
+<span class="hljs-type">int</span>      <span class="hljs-title function_">splinter_shard_release</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> shard_id)</span>;
+<span class="hljs-type">uint32_t</span> <span class="hljs-title function_">splinter_shard_election</span><span class="hljs-params">(<span class="hljs-type">uint8_t</span> *out_intent)</span>;
+<span class="hljs-type">int</span>      <span class="hljs-title function_">splinter_shard_is_sovereign</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> shard_id)</span>;
+<span class="hljs-type">int</span>      <span class="hljs-title function_">splinter_shard_table_snapshot</span><span class="hljs-params">(<span class="hljs-keyword">struct</span> splinter_shard_bid_snapshot *out, <span class="hljs-type">size_t</span> max)</span>;
+<span class="hljs-type">int</span>      <span class="hljs-title function_">splinter_madvise</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> shard_id, <span class="hljs-type">void</span> *addr, <span class="hljs-type">size_t</span> len,
+                          <span class="hljs-type">int</span> advice, <span class="hljs-type">uint64_t</span> timeout_ticks)</span>;
+</code></pre>
+<p>Intent classes (<code>splinter_intent_t</code>): <code>SPL_INTENT_NONE</code>, <code>_WILLNEED</code>,
+<code>_SEQUENTIAL</code>, <code>_RANDOM</code>, <code>_DONTNEED</code>. They map to <code>POSIX_MADV_*</code> advice.</p>
+<p><code>splinter_madvise()</code> <code>timeout_ticks</code> sentinels mirror <code>splinter_event_bus_wait</code>:
+<code>0</code> = non-blocking/defer (returns <code>-1</code>/<code>EAGAIN</code> if not sovereign),
+<code>UINT64_MAX</code> = wait forever, anything else = bounded wait (<code>ETIMEDOUT</code> on
+expiry). When <code>addr == NULL</code> it advises the whole value arena. The range is
+page-aligned for you before the kernel call.</p>
+<h3 id="recommended-usage-patterns" tabindex="-1"><a href="#recommended-usage-patterns" class="header-anchor">Recommended usage patterns</a></h3>
+<ul>
+<li><strong>Latency-sensitive callers</strong> (live completion): declare <code>WILLNEED</code> at high
+priority with a <strong>short</strong> window and <strong>re-bid frequently</strong> rather than holding
+sovereignty across a long pass. Advise <strong>non-blocking</strong> — never block a live
+path on a hint.</li>
+<li><strong>Backfill / sweeps</strong>: declare <code>SEQUENTIAL</code> at low priority, advise
+non-blocking — if a live completer is sovereign, just proceed; deferring is
+correct, backfill is latency-tolerant.</li>
+<li>The reference daemons already do this: <code>splainference</code> (completion) claims
+shard <code>0x5F1A</code> at priority 200; <code>splinference</code> (embeddings) claims <code>0x5F10</code> at
+priority 40 (live) / 20 (backfill).</li>
+</ul>
+<hr>
+<h2 id="the-shard-cli-command" tabindex="-1"><a href="#the-shard-cli-command" class="header-anchor">The <code>shard</code> CLI command</a></h2>
+<p><code>shard</code> is the human face of the bid table — the "auditable at the
+infrastructure level" surface. Intent is <em>declared, recorded, and observable
+before it is acted on</em>.</p>
+<pre><code>shard table                                 # pretty-print all 32 bid slots
+shard who                                   # current sovereign shard_id + intent
+shard claim   &lt;id&gt; &lt;intent&gt; &lt;prio&gt; &lt;dur&gt;    # intent: willneed|sequential|random|dontneed
+shard rebid   &lt;id&gt; &lt;intent&gt; &lt;prio&gt; &lt;dur&gt;
+shard release &lt;id&gt;
+shard advise  &lt;id&gt; &lt;intent&gt; [nowait]        # cooperative madvise over the whole arena
+</code></pre>
+<p><code>shard table</code> columns: slot, shard_id, pid, intent, priority, claimed_at,
+duration, expired?, sovereign?. <code>claimed_at</code> plus actual release timing is the
+raw data a future over-committer feedback loop would consume.</p>
+<blockquote>
+<p><strong>Caveat:</strong> the CLI is a single short-lived process, so <code>claim</code>/<code>release</code> in
+one invocation do <strong>not</strong> persist across invocations — the bid is released
+when the process exits. <code>shard</code> is primarily an inspection/diagnostic surface
+plus a way to seed bids for testing. <code>shard table</code> and <code>shard who</code> are the
+everyday commands.</p>
+</blockquote>
+<p>Example:</p>
+<pre><code>$ splinterctl
+&gt; use mystore
+&gt; shard claim 0x5F1A willneed 200 1152921504606846976
+&gt; shard claim 0x5F10 sequential 20 1152921504606846976
+&gt; shard who
+sovereign=0x5f1a intent=willneed
+&gt; shard advise 0x5F10 willneed nowait
+advise 0x5f10 deferred/failed (rc=-1, errno=Resource temporarily unavailable)
+</code></pre>
+<p>The deferral is the protocol working: <code>0x5F10</code> is not sovereign, and a
+non-blocking advise correctly declines to fight the <code>WILLNEED</code> holder.</p>
+<hr>
+<h2 id="notes-for-operators" tabindex="-1"><a href="#notes-for-operators" class="header-anchor">Notes for operators</a></h2>
+<ul>
+<li><strong>No authentication, by design</strong> (thesis "What Splinter Does Not Do"): any
+process that can open the bus can bid. Enforce isolation at the
+namespace/cgroup level.</li>
+<li><strong>Bid operations never bump <code>H-&gt;epoch</code>.</strong> They are scheduling coordination
+metadata, not data writes, so watchers are not perturbed by claims/releases.</li>
+<li><strong>Out-of-scope (recorded, not yet enforced):</strong> the over-committer penalty/
+feedback loop. <code>claimed_at</code> and release timing are recorded so the data is
+available; policy is future work.</li>
+</ul>
 
 
     <div class="spl-page-nav">
