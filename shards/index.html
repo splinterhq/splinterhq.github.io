@@ -74,28 +74,11 @@
     
 
     <h1>What Are Splinter Logic Shards?</h1>
-<p>Splinter's CLI is easily extended, but, you might want to link against
-<em>considerably more</em> than Splinter's build system allows for, and it's usually
-just for one or several very specific tasks.</p>
-<p>In short, you need to be able to load modules into the CLI architecture that can
-handle your custom processing, transformation, observation, <em><strong>whatever</strong></em>
-without having to wrangle linkage and that didn't need to be located in-tree to
-be compiled.</p>
-<p>If you want to develop a <code>foo</code> command, you should be able to just do so and
-point <code>splinterctl</code> or <code>splinter_cli</code> at the <code>.so</code> file and, provided it
-conforms to a symbol map, loads it.</p>
-<p>This gives you access to Splinter with all the CLI structure and whatever else
-you want to bring in, without having to modify Splinter or the tools.</p>
-<h2 id="the-solution%3A-loadable-shards-(a-type-punned-derivative-of-a-%22splinter%22)" tabindex="-1"><a href="#the-solution%3A-loadable-shards-(a-type-punned-derivative-of-a-%22splinter%22)" class="header-anchor">The Solution: Loadable Shards (a type-punned derivative of a "splinter")</a></h2>
-<p>Design constraints prevent making the CLI's module list dynamic; some platforms
-disallow heap allocation entirely so Splinter tries hard to not require it for
-anything essential, even in tooling.</p>
-<p>We need to instead have an optional dynamic module structure that can advertise
-and enter these 'shards' for the user. As long as they contain the correct entry
-points and metadata, they can be compiled anywhere <code>splinter.h</code> can be found.
-This <code>splinter_shard_t</code> will be the only coupling of tooling to the core store
-(found in the core header, not CLI).</p>
-<h2 id="splinter-format-v4-(now-shipping)-%E2%80%94-logic-shard-election-%26-voluntary-yield" tabindex="-1"><a href="#splinter-format-v4-(now-shipping)-%E2%80%94-logic-shard-election-%26-voluntary-yield" class="header-anchor">Splinter Format v4 (NOW SHIPPING) — Logic Shard Election &amp; Voluntary Yield</a></h2>
+<p>Splinter logic shards orchestrate self-election &amp; voluntary yield when it comes
+to worfklows with competing usage goals in the shared memory store. The highest
+priority shard with the workflow that's most complimentary to the current memory
+usage pattern is the one that typically runs.</p>
+<p>This allows for headless, instant and fully-cooperative scheduling.</p>
 <p>Format v4 adds the <strong>Logic Shard bid table</strong> to the store header: a fixed,
 32-slot region that lets independently-loaded shards coordinate <em>memory intent</em>
 (<code>posix_madvise</code> advice) cooperatively, with no central arbiter, no syscall on
