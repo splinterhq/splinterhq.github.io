@@ -2,82 +2,402 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://splinterhq.github.io/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-append/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-bump-slot/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-client-set-tandem/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-client-unset-tandem/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-close/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-config-clear/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-config-set/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-config-snapshot/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-config-test/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-create-or-open/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-create/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-enumerate-matches/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-event-bus-close/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-event-bus-get-dirty/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-event-bus-init/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-event-bus-open/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-event-bus-wait/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-get-embedding/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-get-epoch/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-get-header-snapshot/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-get-mop/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-get-raw-ptr/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-get-signal-count/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-get-slot-snapshot/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-get/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-integer-op/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-list/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-madvise/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-now/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-open-numa/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-open-or-create/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-open/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-poll/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-pulse-keygroup/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-pulse-watchers/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-purge/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-retrain-slot/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-set-as-system/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-set-embedding/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-set-label/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-set-mop/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-set-named-type/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-set-slot-time/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-set/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-shard-claim-ex/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-shard-claim/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-shard-election/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-shard-is-sovereign/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-shard-rebid/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-shard-release/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-shard-table-snapshot/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-slot-usr-clear/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-slot-usr-set/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-slot-usr-snapshot/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-slot-usr-test/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-unset-label/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-unset/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-watch-label-register/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-watch-register/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/api/splinter-watch-unregister/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://splinterhq.github.io/bindings/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://splinterhq.github.io/bindings/java/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://splinterhq.github.io/bindings/lua/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://splinterhq.github.io/bindings/python/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://splinterhq.github.io/bindings/rust/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://splinterhq.github.io/bindings/shell/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://splinterhq.github.io/bindings/typescript/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://splinterhq.github.io/cli/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/core/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-append/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/core/constants/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-bind/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/core/examples/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-bump/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/core/functions/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-caps/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/core/structures/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-clear/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/installing/</loc>
-    <lastmod>2026-05-27T22:32:15.889Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-cls/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/shards/</loc>
-    <lastmod>2026-05-27T22:32:15.890Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-config/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/splinter-and-linux/</loc>
-    <lastmod>2026-05-27T22:32:15.890Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-export/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/splinter-performance/</loc>
-    <lastmod>2026-05-27T22:32:15.890Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-get/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/tests/</loc>
-    <lastmod>2026-05-27T22:32:15.890Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-head/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
   <url>
-    <loc>https://splinterhq.github.io/use-cases/</loc>
-    <lastmod>2026-05-27T22:32:15.890Z</lastmod>
+    <loc>https://splinterhq.github.io/cli/splinterctl-help/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-hist/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-ingest/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-init/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-label/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-list/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-lua/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-math/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-orders/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-retrain/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-search/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-set/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-shard/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-type/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-unset/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-use/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-uuid/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-wasm/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/cli/splinterctl-watch/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://splinterhq.github.io/environment/</loc>
+    <lastmod>2026-06-30T00:00:00.000Z</lastmod>
   </url>
 </urlset>
